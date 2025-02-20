@@ -6,8 +6,7 @@ const InfoModal = ({ isOpen, onClose }) => {
   return (
     <Modal title={'How to play'} isOpen={isOpen} onClose={onClose}>
       <h3>
-        Guess the WORDLE in six tries. Each guess must be a valid five-letter
-        word. Hit the enter button to submit. After each guess, the color of the
+        Guess the CRYPTIC WORDLE based on the clue in 5 tries. Each guess must be a valid word. Hit the enter button to submit. After each guess, the color of the
         tiles will change to show how close your guess was to the word.
       </h3>
       <div className={styles.row}>

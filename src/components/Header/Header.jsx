@@ -13,7 +13,7 @@ const Header = ({
           <BsInfoCircle size="1.6rem" color="var(--color-icon)" />
         </button>
       </div>
-      <h1>WORDLE</h1>
+      <h1>CRYPTIC WORDLE</h1>
       <div>
         <button onClick={() => setIsStatsModalOpen(true)}>
           <BsBarChart size="1.6rem" color="var(--color-icon)" />
