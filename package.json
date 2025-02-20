@@ -6,14 +6,20 @@
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
     "classnames": "^2.3.1",
+    "dictionary-en": "^4.0.0",
+    "moment-timezone": "^0.5.47",
     "react": "^17.0.2",
     "react-countdown": "^2.3.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "react-scripts": "5.0.0",
     "react-transition-group": "^4.4.2",
+    "request": "^2.88.2",
     "sass": "^1.49.9",
+    "selenium-webdriver": "^4.28.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -50,5 +56,10 @@
   },
   "lint-staged": {
     "src/*.{js,jsx,ts,tsx,json,css,scss,md}": "prettier --write --ignore-unknown"
-  }
+  },
+  "description": "Wordle game clone created using React, SASS",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

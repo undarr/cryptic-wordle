@@ -70,7 +70,7 @@ function App() {
               axios.post(url, payload, { headers })
               .then(response => {
                 const taskId = response.data.result.id;
-                const url = `https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks/${taskId}`;;
+                const url = `https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks/${taskId}`;
                 axios.get(url, { headers })
                 .then(response => {
                   const clue=response.data.result.capturedTexts.clue
