@@ -10,10 +10,7 @@ import useLocalStorage from 'hooks/useLocalStorage';
 import useAlert from 'hooks/useAlert';
 import { VALID_GUESSES } from 'constants/validGuesses';
 import { WORDS } from 'constants/wordList';
-import {
-  ALERT_DELAY,
-  MAX_CHALLENGES,
-} from 'constants/settings';
+import { ALERT_DELAY, MAX_CHALLENGES } from 'constants/settings';
 import styles from './App.module.scss';
 import 'styles/_transitionStyles.scss';
 import axios from 'axios';
@@ -24,75 +21,89 @@ function App() {
     solutionIndex: '',
   });
 
-  const [clue, setclue] = useState("Loading...");
+  const [clue, setclue] = useState('Loading...');
   const [solution, setsolution] = useState(WORDS[0]);
   const [solutionIndex, setsolutionIndex] = useState(0);
   const [tomorrow, settomorrow] = useState(1);
   const [answerlength, setanswerlength] = useState(0);
   useEffect(() => {
-      const epochMs = new Date(2022, 0).valueOf();
-      const now = Date.now();
-      const msInDay = 86400000;
-      const index = Math.floor((now - epochMs) / msInDay);
-      const nextday = (index + 1) * msInDay + epochMs;
-      setsolutionIndex(index)
-      settomorrow(nextday)
-      const tdy = Date.now();
-      console.log(tdy);
-      const startOfToday = Math.floor((tdy + 8 * 60 * 60 * 1000) / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) - 8 * 60 * 60 * 1000;
-      console.log(startOfToday);
-      const url = 'https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks';
-      const headers = {'Authorization': 'Bearer 11a6fede-63f1-4708-9708-839af383cbb9:c6250626-cd55-4f9f-984d-fa0c959ca892'};
-      const params = {page: 1, fromDate: Math.floor(startOfToday/1000),};
-      axios.get(url, { headers, params })
-          .then(response => {
-            console.log(response.data)
-            console.log(response.data.result.robotTasks.items)
-            const items=response.data.result.robotTasks.items.filter(item => item.status === "successful");
-            console.log(items);
-            if (items.length !== 0) {
-              const taskId = items[items.length - 1].id;
-              const url = `https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks/${taskId}`;
-              axios.get(url, { headers })
-              .then(response => {
-                const clue=response.data.result.capturedTexts.clue
-                setclue(clue.split(' ()minc() ')[0])
-                setsolution(clue.split(' ()minc() ')[1])
-                setanswerlength(clue.split(' ()minc() ')[1].length)
-              })
-              .catch(error => {
-                console.error('Error making the request:', error);
-              });
-            } 
-            else {
-              const payload = {inputParameters: {originUrl: "https://sescrap-nrbdl9b6tpj3mqwxstdvhw.streamlit.app/~/+/"}};
-              const url = 'https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks';
-              axios.post(url, payload, { headers })
+    const epochMs = new Date(2022, 0).valueOf();
+    const now = Date.now();
+    const msInDay = 86400000;
+    const index = Math.floor((now - epochMs) / msInDay);
+    const nextday = (index + 1) * msInDay + epochMs;
+    setsolutionIndex(index);
+    settomorrow(nextday);
+    const tdy = Date.now();
+    console.log(tdy);
+    const startOfToday =
+      Math.floor(tdy / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000);
+    console.log(startOfToday);
+    const url =
+      'https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks';
+    const headers = {
+      Authorization:
+        'Bearer 11a6fede-63f1-4708-9708-839af383cbb9:c6250626-cd55-4f9f-984d-fa0c959ca892',
+    };
+    const params = { page: 1, fromDate: Math.floor(startOfToday / 1000) };
+    axios
+      .get(url, { headers, params })
+      .then(response => {
+        const items = response.data.result.robotTasks.items.filter(
+          item => item.status === 'successful'
+        );
+        if (items.length !== 0) {
+          const taskId = items[items.length - 1].id;
+          const url = `https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks/${taskId}`;
+          axios
+            .get(url, { headers })
+            .then(response => {
+              const clue = response.data.result.capturedTexts.clue;
+              setclue(clue.split(' ()minc() ')[0]);
+              setsolution(clue.split(' ()minc() ')[1]);
+              setanswerlength(clue.split(' ()minc() ')[1].length);
+            })
+            .catch(error => {
+              console.error('Error making the request:', error);
+            });
+        } else {
+          const payload = {
+            inputParameters: {
+              originUrl: 'https://u-stscrap.streamlit.app/~/+/',
+            },
+          };
+          const url =
+            'https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks';
+          setclue('Refreshing clue, please wait...');
+          setTimeout(() => {
+            axios
+              .post(url, payload, { headers })
               .then(response => {
                 const taskId = response.data.result.id;
                 const url = `https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks/${taskId}`;
-                axios.get(url, { headers })
-                .then(response => {
-                  const clue=response.data.result.capturedTexts.clue
-                  setclue(clue.split(' ()minc() ')[0])
-                  setsolution(clue.split(' ()minc() ')[1])
-                  setanswerlength(clue.split(' ()minc() ')[1].length)
-                })
-                .catch(error => {
-                  console.error('Error making the request:', error);
-                });
+                axios
+                  .get(url, { headers })
+                  .then(response => {
+                    const clue = response.data.result.capturedTexts.clue;
+                    setclue(clue.split(' ()minc() ')[0]);
+                    setsolution(clue.split(' ()minc() ')[1]);
+                    setanswerlength(clue.split(' ()minc() ')[1].length);
+                  })
+                  .catch(error => {
+                    console.error('Error making the request:', error);
+                  });
               })
               .catch(error => {
                 console.error('Error making the request:', error);
               });
-            }
-          })
-          .catch(error => {
-              console.error('Error making the request:', error);
-          });
-
+          }, 10000);
+        }
+      })
+      .catch(error => {
+        console.error('Error making the request:', error);
+      });
   }, []);
-  
+
   const [theme, setTheme] = useLocalStorage('theme', 'dark');
   const [highContrast, setHighContrast] = useLocalStorage(
     'high-contrast',
@@ -167,10 +178,12 @@ function App() {
 
   const isWordValid = async word => {
     try {
-      await axios.get('https://api.dictionaryapi.dev/api/v2/entries/en/'+word.toLowerCase());
-      return(true)
+      await axios.get(
+        'https://api.dictionaryapi.dev/api/v2/entries/en/' + word.toLowerCase()
+      );
+      return true;
     } catch (error) {
-      console.error("There was an error!", error);
+      console.error('There was an error!', error);
       return (
         VALID_GUESSES.includes(word.toLowerCase()) ||
         WORDS.includes(word.toLowerCase())
@@ -181,10 +194,10 @@ function App() {
   const getGuessStatuses = guess => {
     const splitGuess = guess.toLowerCase().split('');
     const splitSolution = solution.split('');
-  
+
     const statuses = [];
     const solutionCharsTaken = splitSolution.map(_ => false);
-  
+
     // handle all correct cases first
     splitGuess.forEach((letter, i) => {
       if (letter === splitSolution[i]) {
@@ -193,21 +206,21 @@ function App() {
         return;
       }
     });
-  
+
     splitGuess.forEach((letter, i) => {
       if (statuses[i]) return;
-  
+
       if (!splitSolution.includes(letter)) {
         // handles the absent case
         statuses[i] = 'absent';
         return;
       }
-  
+
       // now we are left with "present"s
       const indexOfPresentChar = splitSolution.findIndex(
         (x, index) => x === letter && !solutionCharsTaken[index]
       );
-  
+
       if (indexOfPresentChar > -1) {
         statuses[i] = 'present';
         solutionCharsTaken[indexOfPresentChar] = true;
@@ -217,22 +230,23 @@ function App() {
         return;
       }
     });
-  
+
     return statuses;
   };
 
   const getStatuses = guesses => {
     const charObj = {};
     const splitSolution = solution.toUpperCase().split('');
-  
+
     guesses.forEach(word => {
       word.split('').forEach((letter, i) => {
-        if (!splitSolution.includes(letter)) return (charObj[letter] = 'absent');
+        if (!splitSolution.includes(letter))
+          return (charObj[letter] = 'absent');
         if (letter === splitSolution[i]) return (charObj[letter] = 'correct');
         if (charObj[letter] !== 'correct') return (charObj[letter] = 'present');
       });
     });
-  
+
     return charObj;
   };
 
@@ -240,21 +254,21 @@ function App() {
     if (guesses.length === 0) {
       return false;
     }
-  
+
     const lettersLeftArray = [];
     const guess = guesses[guesses.length - 1];
     const statuses = getGuessStatuses(guess);
     const splitWord = word.toUpperCase().split('');
     const splitGuess = guess.toUpperCase().split('');
-  
+
     for (let i = 0; i < splitGuess.length; i++) {
       if (statuses[i] === 'correct' || statuses[i] === 'present')
         lettersLeftArray.push(splitGuess[i]);
-  
+
       if (statuses[i] === 'correct' && splitWord[i] !== splitGuess[i])
         return `Must use ${splitGuess[i]} in position ${i + 1}`;
     }
-  
+
     // check for the first unused letter, taking duplicate letters
     // into account - see issue #198
     let n;
@@ -264,19 +278,19 @@ function App() {
         lettersLeftArray.splice(n, 1);
       }
     }
-  
+
     if (lettersLeftArray.length > 0)
       return `Guess must contain ${lettersLeftArray[0]}`;
-  
+
     return false;
   };
 
   const addStatsForCompletedGame = (gameStats, count) => {
     // Count is number of incorrect guesses before end.
     const stats = { ...gameStats };
-  
+
     stats.totalGames += 1;
-  
+
     if (count >= MAX_CHALLENGES) {
       // A fail situation
       stats.currentStreak = 0;
@@ -284,20 +298,20 @@ function App() {
     } else {
       stats.winDistribution[count] += 1;
       stats.currentStreak += 1;
-  
+
       if (stats.bestStreak < stats.currentStreak) {
         stats.bestStreak = stats.currentStreak;
       }
     }
-  
+
     stats.successRate = getSuccessRate(stats);
-  
+
     return stats;
   };
 
   const getSuccessRate = gameStats => {
     const { totalGames, gamesFailed } = gameStats;
-  
+
     return Math.round(
       (100 * (totalGames - gamesFailed)) / Math.max(totalGames, 1)
     );
@@ -310,7 +324,7 @@ function App() {
   ${isGameLost ? 'X' : guesses.length}/${MAX_CHALLENGES} 
   ${isHardMode ? 'Hard Mode' : ''}
   \n` + generateEmojiGrid(guesses);
-  
+
     navigator.clipboard.writeText(textToShare);
   };
 
@@ -319,7 +333,7 @@ function App() {
       .map(guess => {
         const status = getGuessStatuses(guess);
         const splitGuess = guess.split('');
-  
+
         return splitGuess
           .map((_, i) => {
             switch (status[i]) {
@@ -367,7 +381,7 @@ function App() {
       return showAlert('Not enough letters', 'error');
     }
 
-    const wv = await isWordValid(currentGuess)
+    const wv = await isWordValid(currentGuess);
 
     if (!wv) {
       setIsJiggling(true);
