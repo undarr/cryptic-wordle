@@ -179,7 +179,9 @@ function App() {
     }
     const fetchContent = async () => {
       try {
-        const response = await axios.get('/' + word.toLowerCase());
+        const response = await axios.get(
+          'https://www.thefreedictionary.com/' + word.toLowerCase()
+        );
         const parser = new DOMParser();
         const doc = parser.parseFromString(response.data, 'text/html');
         const mainDiv = doc.getElementById('MainTxt');
