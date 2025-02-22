@@ -20,7 +20,9 @@
     "request": "^2.88.2",
     "sass": "^1.49.9",
     "selenium-webdriver": "^4.28.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "word-list": "^4.1.0",
+    "word-list-json": "^0.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -61,5 +63,6 @@
   "main": "index.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "proxy": "https://www.thefreedictionary.com"
 }

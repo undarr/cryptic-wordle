@@ -8,7 +8,6 @@ import SettingModal from 'components/SettingModal';
 import StatsModal from 'components/StatsModal';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useAlert from 'hooks/useAlert';
-import { VALID_GUESSES } from 'constants/validGuesses';
 import { WORDS } from 'constants/wordList';
 import { ALERT_DELAY, MAX_CHALLENGES } from 'constants/settings';
 import styles from './App.module.scss';
@@ -35,10 +34,8 @@ function App() {
     setsolutionIndex(index);
     settomorrow(nextday);
     const tdy = Date.now();
-    console.log(tdy);
     const startOfToday =
       Math.floor(tdy / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000);
-    console.log(startOfToday);
     const url =
       'https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks';
     const headers = {
@@ -74,7 +71,7 @@ function App() {
           };
           const url =
             'https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks';
-          setclue('Refreshing clue, please wait...');
+          setclue('Refreshing clue, please wait... (~45 seconds)');
           setTimeout(() => {
             axios
               .post(url, payload, { headers })
@@ -96,7 +93,7 @@ function App() {
               .catch(error => {
                 console.error('Error making the request:', error);
               });
-          }, 10000);
+          }, 45000);
         }
       })
       .catch(error => {
@@ -177,18 +174,40 @@ function App() {
   }, [isDarkMode, isHighContrastMode]);
 
   const isWordValid = async word => {
-    try {
-      await axios.get(
-        'https://api.dictionaryapi.dev/api/v2/entries/en/' + word.toLowerCase()
-      );
+    if (word.toLowerCase() === solution) {
       return true;
-    } catch (error) {
-      console.error('There was an error!', error);
-      return (
-        VALID_GUESSES.includes(word.toLowerCase()) ||
-        WORDS.includes(word.toLowerCase())
-      );
     }
+    const fetchContent = async () => {
+      try {
+        const response = await axios.get('/' + word.toLowerCase());
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(response.data, 'text/html');
+        const mainDiv = doc.getElementById('MainTxt');
+        const notindict =
+          mainDiv.innerHTML.includes(
+            'Word not found in the Dictionary and Encyclopedia.'
+          ) ||
+          mainDiv.innerHTML.includes(
+            'is not available in the general English dictionary.'
+          );
+        if (notindict) {
+          return false;
+        }
+        const h1Element = doc.querySelector('h1').innerHTML.toLowerCase();
+        if (h1Element === word.toLowerCase()) {
+          return true;
+        }
+        return (
+          h1Element + 's' === word.toLowerCase() &&
+          !'hsyz'.includes(h1Element.slice(-1))
+        );
+      } catch (error) {
+        console.error('Error fetching content:', error);
+        var wordList = require('word-list-json');
+        return wordList.includes(word);
+      }
+    };
+    return fetchContent();
   };
 
   const getGuessStatuses = guess => {
