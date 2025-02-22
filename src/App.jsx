@@ -8,6 +8,7 @@ import SettingModal from 'components/SettingModal';
 import StatsModal from 'components/StatsModal';
 import useLocalStorage from 'hooks/useLocalStorage';
 import useAlert from 'hooks/useAlert';
+import { VALID_GUESSES } from 'constants/validGuesses';
 import { WORDS } from 'constants/wordList';
 import { ALERT_DELAY, MAX_CHALLENGES } from 'constants/settings';
 import styles from './App.module.scss';
@@ -173,43 +174,11 @@ function App() {
     else document.body.removeAttribute('data-mode');
   }, [isDarkMode, isHighContrastMode]);
 
-  const isWordValid = async word => {
-    if (word.toLowerCase() === solution) {
-      return true;
-    }
-    const fetchContent = async () => {
-      try {
-        const response = await axios.get(
-          'https://www.thefreedictionary.com/' + word.toLowerCase()
-        );
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(response.data, 'text/html');
-        const mainDiv = doc.getElementById('MainTxt');
-        const notindict =
-          mainDiv.innerHTML.includes(
-            'Word not found in the Dictionary and Encyclopedia.'
-          ) ||
-          mainDiv.innerHTML.includes(
-            'is not available in the general English dictionary.'
-          );
-        if (notindict) {
-          return false;
-        }
-        const h1Element = doc.querySelector('h1').innerHTML.toLowerCase();
-        if (h1Element === word.toLowerCase()) {
-          return true;
-        }
-        return (
-          h1Element + 's' === word.toLowerCase() &&
-          !'hsyz'.includes(h1Element.slice(-1))
-        );
-      } catch (error) {
-        console.error('Error fetching content:', error);
-        var wordList = require('word-list-json');
-        return wordList.includes(word);
-      }
-    };
-    return fetchContent();
+  const isWordValid = word => {
+    return (
+      VALID_GUESSES.includes(word.toLowerCase()) ||
+      WORDS.includes(word.toLowerCase())
+    );
   };
 
   const getGuessStatuses = guess => {

@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "an-array-of-english-words": "^2.0.0",
     "axios": "^1.7.9",
     "cheerio": "^1.0.0",
     "classnames": "^2.3.1",
@@ -22,7 +23,8 @@
     "selenium-webdriver": "^4.28.1",
     "web-vitals": "^2.1.4",
     "word-list": "^4.1.0",
-    "word-list-json": "^0.2.0"
+    "word-list-json": "^0.2.0",
+    "wordlist-english": "^1.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
