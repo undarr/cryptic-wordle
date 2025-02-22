@@ -338,7 +338,7 @@ function App() {
 
   const shareStatus = (guesses, isGameLost, isHardMode) => {
     const textToShare =
-      `Wordle Game
+      `Cryptic Wordle
   #${solutionIndex} 
   ${isGameLost ? 'X' : guesses.length}/${MAX_CHALLENGES} 
   ${isHardMode ? 'Hard Mode' : ''}
