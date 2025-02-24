@@ -19,6 +19,16 @@ button {
 
 @media screen and (max-width: 480px) {
   h1 {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
+}
+
+a {
+  color: white; /* Change to your desired color */
+  text-decoration: none;
+}
+
+/* Change the color of links on hover */
+a:hover {
+  color: #B6FF00; /* Change to your desired hover color */
 }

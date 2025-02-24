@@ -4,7 +4,7 @@ import Cell from 'components/Cell';
 import { MAX_CHALLENGES } from 'constants/settings';
 import styles from './Grid.module.scss';
 
-const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatuses, MAX_WORD_LENGTH, clue}) => {
+const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatuses, MAX_WORD_LENGTH, clue, displayhint}) => {
   const empties =
     MAX_CHALLENGES > guesses.length
       ? Array(MAX_CHALLENGES - guesses.length - 1).fill()
@@ -19,7 +19,27 @@ const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatus
 
   return (
     <div className={styles.grid}>
-      <h2 style={{ textAlign: 'center' }}>{clue}</h2>
+      <h2 style={{ textAlign: 'center' }}>{clue.split(' ').map((word, index) => {
+        if (index!==clue.split(' ').length-1) {
+            return (
+                <a
+                    key={index}
+                    href={"https://www.google.com/search?q="+word+"+synonym"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ marginRight: '5px' }}
+                >
+                    {word}
+                </a>
+            );
+        }
+        return (
+            <span key={index} style={{ marginRight: '5px' }}>
+                {word}
+            </span>
+        );
+    })}</h2>
+      <p style={{ textAlign: 'center' }}>{displayhint}</p>
       {guesses.map((guess, i) => (
         <CompletedRow key={i} guess={guess} getGuessStatuses={getGuessStatuses} MAX_WORD_LENGTH={MAX_WORD_LENGTH}/>
       ))}

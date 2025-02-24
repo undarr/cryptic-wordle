@@ -22,16 +22,19 @@ function App() {
   });
 
   const [clue, setclue] = useState('Loading...');
+  const [hint, sethint] = useState('Loading...');
+  const [displayhint, setdisplayhint] = useState('');
+  const [video, setvideo] = useState('www.example.com');
   const [solution, setsolution] = useState(WORDS[0]);
   const [solutionIndex, setsolutionIndex] = useState(0);
   const [tomorrow, settomorrow] = useState(1);
   const [answerlength, setanswerlength] = useState(0);
   useEffect(() => {
-    const epochMs = new Date(2022, 0).valueOf();
+    const epochMs = 1740355200000;
     const now = Date.now();
     const msInDay = 86400000;
-    const index = Math.floor((now - epochMs) / msInDay);
-    const nextday = (index + 1) * msInDay + epochMs;
+    const index = 4 + Math.floor((now - epochMs) / msInDay);
+    const nextday = (index - 3) * msInDay + epochMs;
     setsolutionIndex(index);
     settomorrow(nextday);
     const tdy = Date.now();
@@ -56,10 +59,12 @@ function App() {
           axios
             .get(url, { headers })
             .then(response => {
-              const clue = response.data.result.capturedTexts.clue;
-              setclue(clue.split(' ()minc() ')[0]);
-              setsolution(clue.split(' ()minc() ')[1]);
-              setanswerlength(clue.split(' ()minc() ')[1].length);
+              const data = response.data.result.capturedTexts.clue;
+              setclue(data.split(' ()minc() ')[0]);
+              setsolution(data.split(' ()minc() ')[1]);
+              sethint(data.split(' ()minc() ')[2]);
+              setvideo(data.split(' ()minc() ')[3]);
+              setanswerlength(data.split(' ()minc() ')[1].length);
             })
             .catch(error => {
               console.error('Error making the request:', error);
@@ -310,9 +315,8 @@ function App() {
   const shareStatus = (guesses, isGameLost, isHardMode) => {
     const textToShare =
       `Cryptic Wordle
-  #${solutionIndex} 
-  ${isGameLost ? 'X' : guesses.length}/${MAX_CHALLENGES} 
-  ${isHardMode ? 'Hard Mode' : ''}
+  #${solutionIndex}, ${isGameLost ? 'X' : guesses.length}/${MAX_CHALLENGES} 
+  ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
   \n` + generateEmojiGrid(guesses);
 
     navigator.clipboard.writeText(textToShare);
@@ -355,6 +359,10 @@ function App() {
     setHardMode(!isHardMode);
   };
 
+  const showhint = () => {
+    setdisplayhint('Hint: ' + hint);
+  };
+
   const handleKeyDown = letter =>
     currentGuess.length < answerlength &&
     !isGameWon &&
@@ -363,7 +371,7 @@ function App() {
   const handleDelete = () =>
     setCurrentGuess(currentGuess.slice(0, currentGuess.length - 1));
 
-  const handleEnter = async () => {
+  const handleEnter = () => {
     if (isGameWon || isGameLost) return;
 
     if (currentGuess.length < answerlength) {
@@ -371,7 +379,7 @@ function App() {
       return showAlert('Not enough letters', 'error');
     }
 
-    const wv = await isWordValid(currentGuess);
+    const wv = isWordValid(currentGuess);
 
     if (!wv) {
       setIsJiggling(true);
@@ -402,6 +410,8 @@ function App() {
         setIsInfoModalOpen={setIsInfoModalOpen}
         setIsStatsModalOpen={setIsStatsModalOpen}
         setIsSettingsModalOpen={setIsSettingsModalOpen}
+        showhint={showhint}
+        displayhint={displayhint}
       />
       <Alert />
       <Grid
@@ -412,6 +422,7 @@ function App() {
         getGuessStatuses={getGuessStatuses}
         MAX_WORD_LENGTH={answerlength}
         clue={clue}
+        displayhint={displayhint}
       />
       <Keyboard
         onEnter={handleEnter}
@@ -446,6 +457,7 @@ function App() {
         showAlert={showAlert}
         tomorrow={tomorrow}
         shareStatus={shareStatus}
+        v={video}
       />
     </div>
   );

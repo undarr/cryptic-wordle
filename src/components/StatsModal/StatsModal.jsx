@@ -14,7 +14,8 @@ const StatsModal = ({
   guesses,
   showAlert,
   tomorrow,
-  shareStatus
+  shareStatus,
+  v
 }) => {
   const handleShare = () => {
     shareStatus(guesses, isGameLost, isHardMode);
@@ -41,7 +42,9 @@ const StatsModal = ({
           />
         ))}
       </div>
-      {(isGameWon || isGameLost) && (
+      {(isGameWon || isGameLost) && (<>
+        <div className={styles.result}>
+        <div className={styles.share}><button onClick={() => {window.open(v, '_blank');}}>See Explanation</button></div></div>
         <div className={styles.result}>
           <div className={styles.countDown}>
             <h2>Next word in</h2>
@@ -54,7 +57,7 @@ const StatsModal = ({
           <div className={styles.share}>
             <button onClick={handleShare}>Share</button>
           </div>
-        </div>
+        </div></>
       )}
     </Modal>
   );
