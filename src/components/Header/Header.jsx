@@ -1,12 +1,14 @@
-import { BsBarChart, BsGear, BsInfoCircle, BsFillQuestionDiamondFill, BsQuestionDiamond} from 'react-icons/bs';
+import { BsBarChart, BsGear, BsInfoCircle, BsFillQuestionDiamondFill, BsQuestionDiamond, BsShareFill} from 'react-icons/bs';
 import './Header.module.scss';
 
 const Header = ({
   setIsInfoModalOpen,
   setIsStatsModalOpen,
   setIsSettingsModalOpen,
+  clue,
   showhint,
-  displayhint
+  displayhint,
+  showAlert
 }) => {
   return (
     <header>
@@ -21,6 +23,9 @@ const Header = ({
       </div>
       <h1><a href="https://www.minutecryptic.com/" target="_blank" rel="noopener noreferrer">CRYPTIC</a> <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener noreferrer">WORDLE</a></h1>
       <div>
+        <button onClick={() => {navigator.clipboard.writeText(clue+"\nhttps://ucrypticwordle.netlify.app/"); showAlert('Clue copied to clipboard', 'success');}}>
+          <BsShareFill size="1.6rem" color="var(--color-icon)"/>
+        </button>
         <button onClick={() => setIsStatsModalOpen(true)}>
           <BsBarChart size="1.6rem" color="var(--color-icon)" />
         </button>

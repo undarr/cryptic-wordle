@@ -314,10 +314,15 @@ function App() {
 
   const shareStatus = (guesses, isGameLost, isHardMode) => {
     const textToShare =
-      `Cryptic Wordle
-  #${solutionIndex}, ${isGameLost ? 'X' : guesses.length}/${MAX_CHALLENGES} 
-  ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
-  \n` + generateEmojiGrid(guesses);
+      `${clue}
+https://ucrypticwordle.netlify.app/
+
+Cryptic Wordle
+#${solutionIndex}, ${displayhint === '' ? '🔒' : '🔓'} ${
+        isGameLost ? 'X' : guesses.length
+      }/${MAX_CHALLENGES} 
+${isHardMode ? 'Hard Mode' : 'Normal Mode'}
+\n` + generateEmojiGrid(guesses);
 
     navigator.clipboard.writeText(textToShare);
   };
@@ -410,8 +415,10 @@ function App() {
         setIsInfoModalOpen={setIsInfoModalOpen}
         setIsStatsModalOpen={setIsStatsModalOpen}
         setIsSettingsModalOpen={setIsSettingsModalOpen}
+        clue={clue}
         showhint={showhint}
         displayhint={displayhint}
+        showAlert={showAlert}
       />
       <Alert />
       <Grid

@@ -17,10 +17,35 @@ const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatus
     // eslint-disable-next-line
   }, [isJiggling]);
 
+  const splitline = (inputText,n=30) => {
+    if (window.innerWidth <= 480) {
+      const words = inputText.split(' ');
+      const lines = [];
+      let currentLinelc = '';
+      words.forEach((word) => {
+          if (word!=='') {
+              if ((currentLinelc + word).length < n) {
+                  currentLinelc += (currentLinelc ? ' ' : '') + word;
+                  } else {
+                  lines.push(currentLinelc.trim());
+                  currentLinelc = word;
+                  }
+          }
+      });
+
+      if (currentLinelc) {
+          lines.push(currentLinelc.trim());
+      }
+      return (lines.join(' \n '));
+    } else {
+      return(inputText.trim())
+    }
+  };
+
   return (
     <div className={styles.grid}>
-      <h2 style={{ textAlign: 'center' }}>{clue.split(' ').map((word, index) => {
-        if (index!==clue.split(' ').length-1) {
+      <h2 style={{ textAlign: 'center' }}>{splitline(clue).split(' ').map((word, index) => {
+        if (index!==splitline(clue).split(' ').length-1 && word!=="\n") {
             return (
                 <a
                     key={index}
@@ -65,7 +90,7 @@ const CurrentRow = ({ guess, isJiggling, MAX_WORD_LENGTH }) => {
   return (
     <div className={classes} style={{"grid-template-columns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>
       {cells.map((letter, index) => (
-        <Cell key={index} value={letter} />
+        <Cell key={index} value={letter} wordlength={MAX_WORD_LENGTH} />
       ))}
     </div>
   );
@@ -84,6 +109,7 @@ const CompletedRow = ({ guess, getGuessStatuses, MAX_WORD_LENGTH}) => {
           value={letter}
           isCompleted
           status={statuses[index]}
+          wordlength={MAX_WORD_LENGTH}
         />
       ))}
     </div>
@@ -96,7 +122,7 @@ const EmptyRow = ({MAX_WORD_LENGTH}) => {
   return (
     <div className={styles.row} style={{"grid-template-columns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>
       {cells.map((_, index) => (
-        <Cell key={index} />
+        <Cell key={index} wordlength={MAX_WORD_LENGTH} />
       ))}
     </div>
   );
