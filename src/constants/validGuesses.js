@@ -128117,6 +128117,8 @@ export const VALID_GUESSES = [
 'korat',
 'korats',
 'kore',
+'korea',
+'korean',
 'korero',
 'koreroed',
 'koreroing',
