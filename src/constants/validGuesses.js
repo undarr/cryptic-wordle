@@ -211763,6 +211763,7 @@ export const VALID_GUESSES = [
 'scorpaenoids',
 'scorper',
 'scorpers',
+'scorpio',
 'scorpioid',
 'scorpioids',
 'scorpion',

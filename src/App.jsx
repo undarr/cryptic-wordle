@@ -179,10 +179,11 @@ function App() {
     else document.body.removeAttribute('data-mode');
   }, [isDarkMode, isHighContrastMode]);
 
-  const isWordValid = word => {
+  const isWordValid = (word, solution) => {
     return (
       VALID_GUESSES.includes(word.toLowerCase()) ||
-      WORDS.includes(word.toLowerCase())
+      WORDS.includes(word.toLowerCase()) ||
+      word.toLowerCase() === solution.toLowerCase()
     );
   };
 
@@ -384,7 +385,7 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
       return showAlert('Not enough letters', 'error');
     }
 
-    const wv = isWordValid(currentGuess);
+    const wv = isWordValid(currentGuess, solution);
 
     if (!wv) {
       setIsJiggling(true);
