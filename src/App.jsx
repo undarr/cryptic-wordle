@@ -370,6 +370,9 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
 
         return splitGuess
           .map((_, i) => {
+            if (guess[i] == '-') {
+              return '➖';
+            }
             switch (status[i]) {
               case 'correct':
                 return '🟩';
