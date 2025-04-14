@@ -1,4 +1,5 @@
 export const VALID_GUESSES = [
+'a',
 'aa',
 'aah',
 'aahed',
@@ -113094,6 +113095,7 @@ export const VALID_GUESSES = [
 'hyte',
 'hythe',
 'hythes',
+'i',
 'iamb',
 'iambi',
 'iambic',

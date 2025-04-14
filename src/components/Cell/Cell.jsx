@@ -14,7 +14,7 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell}) => 
     [styles.absent]: status === 'absent',
     [styles.present]: status === 'present',
     [styles.correct]: status === 'correct',
-    [styles.fill]: value,
+    [styles.fill]: value && value!==" ",
     [styles.reveal]: isCompleted,
     [styles.infocell]: infocell,
   });

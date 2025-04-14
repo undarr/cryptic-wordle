@@ -16,11 +16,35 @@ import 'styles/_transitionStyles.scss';
 import axios from 'axios';
 
 function App() {
+  function startguess(x) {
+    let s = '';
+    let t = 0;
+    for (let i = 0; i < x.length; i++) {
+      t += 1;
+      if (x[i] === '-') {
+        s += (t - 1).toString();
+        t = 0;
+      }
+    }
+    return s;
+  }
+  function tosolu(x) {
+    let s = '';
+    for (let i of x) {
+      if (!isNaN(i)) {
+        s += ' '.repeat(Number(i)) + '-';
+      } else if (s.includes(' ')) {
+        s = s.replace(' ', i);
+      } else {
+        s += i;
+      }
+    }
+    return s;
+  }
   const [boardState, setBoardState] = useLocalStorage('boardState', {
     guesses: [],
     solutionIndex: '',
   });
-
   const [clue, setclue] = useState('Loading...');
   const [hint, sethint] = useState('Loading...');
   const [displayhint, setdisplayhint] = useState('');
@@ -59,12 +83,15 @@ function App() {
           axios
             .get(url, { headers })
             .then(response => {
-              const data = response.data.result.capturedTexts.clue;
+              const data =
+                response.data.result.capturedTexts.clue.split(' ()big() ')[0];
               setclue(data.split(' ()minc() ')[0]);
-              setsolution(data.split(' ()minc() ')[1]);
+              const newsol = data.split(' ()minc() ')[1].replace(/ /g, '-');
+              setsolution(newsol);
               sethint(data.split(' ()minc() ')[2]);
               setvideo(data.split(' ()minc() ')[3]);
-              setanswerlength(data.split(' ()minc() ')[1].length);
+              setanswerlength(newsol.length);
+              setCurrentGuess(startguess(newsol));
             })
             .catch(error => {
               console.error('Error making the request:', error);
@@ -77,7 +104,7 @@ function App() {
           };
           const url =
             'https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks';
-          setclue('Refreshing clue, please wait... (~45 seconds)');
+          setclue('Clue not found 404');
           setTimeout(() => {
             axios
               .post(url, payload, { headers })
@@ -122,10 +149,7 @@ function App() {
     successRate: 0,
   });
   const [currentGuess, setCurrentGuess] = useState('');
-  const [guesses, setGuesses] = useState(() => {
-    if (boardState.solutionIndex !== solutionIndex) return [];
-    return boardState.guesses;
-  });
+  const [guesses, setGuesses] = useState([]);
   const [isJiggling, setIsJiggling] = useState(false);
   const [isGameWon, setIsGameWon] = useState(false);
   const [isGameLost, setIsGameLost] = useState(false);
@@ -179,11 +203,21 @@ function App() {
     else document.body.removeAttribute('data-mode');
   }, [isDarkMode, isHighContrastMode]);
 
-  const isWordValid = (word, solution) => {
+  function isWordsValid(word, solution) {
+    if (word.toLowerCase() === solution.toLowerCase()) {
+      return true;
+    }
+    if (word.includes('-')) {
+      return word.split('-').every(i => isWordValid(i));
+    } else {
+      return isWordValid(word);
+    }
+  }
+
+  const isWordValid = word => {
     return (
       VALID_GUESSES.includes(word.toLowerCase()) ||
-      WORDS.includes(word.toLowerCase()) ||
-      word.toLowerCase() === solution.toLowerCase()
+      WORDS.includes(word.toLowerCase())
     );
   };
 
@@ -374,8 +408,14 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
     !isGameWon &&
     setCurrentGuess(currentGuess + letter);
 
-  const handleDelete = () =>
-    setCurrentGuess(currentGuess.slice(0, currentGuess.length - 1));
+  const handleDelete = () => {
+    if (
+      currentGuess.length !== 0 &&
+      isNaN(currentGuess[currentGuess.length - 1])
+    ) {
+      setCurrentGuess(currentGuess.slice(0, currentGuess.length - 1));
+    }
+  };
 
   const handleEnter = () => {
     if (isGameWon || isGameLost) return;
@@ -385,7 +425,7 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
       return showAlert('Not enough letters', 'error');
     }
 
-    const wv = isWordValid(currentGuess, solution);
+    const wv = isWordsValid(tosolu(currentGuess), solution);
 
     if (!wv) {
       setIsJiggling(true);
@@ -393,21 +433,24 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
     }
 
     if (isHardMode) {
-      const firstMissingReveal = findFirstUnusedReveal(currentGuess, guesses);
+      const firstMissingReveal = findFirstUnusedReveal(
+        tosolu(currentGuess),
+        guesses
+      );
       if (firstMissingReveal) {
         setIsJiggling(true);
         return showAlert(firstMissingReveal, 'error');
       }
     }
 
-    if (currentGuess === solution.toUpperCase()) {
+    if (tosolu(currentGuess) === solution.toUpperCase()) {
       setStats(addStatsForCompletedGame(stats, guesses.length));
     } else if (guesses.length + 1 === MAX_CHALLENGES) {
       setStats(addStatsForCompletedGame(stats, guesses.length + 1));
     }
 
-    setGuesses([...guesses, currentGuess]);
-    setCurrentGuess('');
+    setGuesses([...guesses, tosolu(currentGuess)]);
+    setCurrentGuess(startguess(solution));
   };
 
   return (
@@ -423,7 +466,7 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
       />
       <Alert />
       <Grid
-        currentGuess={currentGuess}
+        currentGuess={tosolu(currentGuess)}
         guesses={guesses}
         isJiggling={isJiggling}
         setIsJiggling={setIsJiggling}
