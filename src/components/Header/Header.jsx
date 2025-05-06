@@ -20,7 +20,7 @@ const Header = ({
 }) => {
   return (
     <header>
-      <div style={{display: 'flex', gap: '0px', width:"30%"}}>
+      <div className={styles.butcon}>
         <button style={{height: "1.6rem"}} onClick={() => setIsInfoModalOpen(true)}>
           <BsInfoCircle size="1.6rem" color="var(--color-icon)" />
         </button>
@@ -35,7 +35,7 @@ const Header = ({
         </button>
       </div>
       <h1><a href="https://www.minutecryptic.com/" target="_blank" rel="noopener noreferrer">CRYPTIC</a> <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener noreferrer">WORDLE</a></h1>
-      <div style={{ display: 'flex', gap: '0px', width:"30%", justifyContent: 'flex-end'}}>
+      <div className={styles.butcon2}>
         <button onClick={() => {navigator.clipboard.writeText(clue+"\nhttps://ucrypticwordle.netlify.app/"); showAlert('Clue copied to clipboard', 'success');}}>
           <BsShareFill size="1.6rem" color="var(--color-icon)"/>
         </button>

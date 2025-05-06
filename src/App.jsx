@@ -49,9 +49,9 @@ function App() {
   const [hint1, sethint1] = useState('Loading...');
   const [hint2, sethint2] = useState('Loading...');
   const [hint3, sethint3] = useState('Loading...');
-  const [hintt1, sethintt1] = useState('Loading...');
-  const [hintt2, sethintt2] = useState('Loading...');
-  const [hintt3, sethintt3] = useState('Loading...');
+  const [hintt1, sethintt1] = useState('-Loading...');
+  const [hintt2, sethintt2] = useState('-Loading...');
+  const [hintt3, sethintt3] = useState('-Loading...');
   const [displayhint1, setdisplayhint1] = useState('');
   const [displayhint2, setdisplayhint2] = useState('');
   const [displayhint3, setdisplayhint3] = useState('');
@@ -171,6 +171,7 @@ function App() {
   const [isHardMode, setIsHardMode] = useState(hardMode);
   const [isDarkMode, setIsDarkMode] = useState(theme === 'dark');
   const [isHighContrastMode, setIsHighContrastMode] = useState(highContrast);
+  const [enterdisable, setenterdisable] = useState(false);
   const { showAlert } = useAlert();
 
   // Show welcome modal
@@ -203,6 +204,8 @@ function App() {
         ALERT_DELAY
       );
       setTimeout(() => setIsStatsModalOpen(true), ALERT_DELAY + 1000);
+    } else if (guesses.length === MAX_CHALLENGES - 1) {
+      setTimeout(() => showAlert('Last chance!', 'error', true), 500);
     }
     // eslint-disable-next-line
   }, [guesses]);
@@ -451,7 +454,7 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
   };
 
   const handleEnter = () => {
-    if (isGameWon || isGameLost) return;
+    if (isGameWon || isGameLost || enterdisable) return;
 
     if (currentGuess.length < answerlength) {
       setIsJiggling(true);
@@ -481,6 +484,9 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
     } else if (guesses.length + 1 === MAX_CHALLENGES) {
       setStats(addStatsForCompletedGame(stats, guesses.length + 1));
     }
+
+    setenterdisable(true);
+    setTimeout(setenterdisable(false), 500);
 
     setGuesses([...guesses, tosolu(currentGuess)]);
     setCurrentGuess(startguess(solution));

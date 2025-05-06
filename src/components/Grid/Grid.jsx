@@ -72,19 +72,19 @@ const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatus
       <p style={{ textAlign: 'center', color: "var(--color-text-primary)"}}>{displayhint2}</p>
       <p style={{ textAlign: 'center', color: "var(--color-text-primary)"}}>{displayhint3}</p>
       {guesses.map((guess, i) => (
-        <CompletedRow key={i} guess={guess} getGuessStatuses={getGuessStatuses} MAX_WORD_LENGTH={MAX_WORD_LENGTH}/>
+        <CompletedRow key={i} guess={guess} getGuessStatuses={getGuessStatuses} MAX_WORD_LENGTH={MAX_WORD_LENGTH} guesslength={guesses.length}/>
       ))}
       {!isGameWon && guesses.length < MAX_CHALLENGES && (
-        <CurrentRow guess={currentGuess} isJiggling={isJiggling} MAX_WORD_LENGTH={MAX_WORD_LENGTH}/>
+        <CurrentRow guess={currentGuess} isJiggling={isJiggling} MAX_WORD_LENGTH={MAX_WORD_LENGTH} guesslength={guesses.length}/>
       )}
       {true ? <></> : empties.map((_, i) => ( //infinte guesses
-        <EmptyRow key={i} MAX_WORD_LENGTH={MAX_WORD_LENGTH} />
+        <EmptyRow key={i} MAX_WORD_LENGTH={MAX_WORD_LENGTH} guesslength={guesses.length}/>
       ))}
     </div>
   );
 };
 
-const CurrentRow = ({ guess, isJiggling, MAX_WORD_LENGTH }) => {
+const CurrentRow = ({ guess, isJiggling, MAX_WORD_LENGTH, guesslength}) => {
   const emptyCells = Array(MAX_WORD_LENGTH - guess.length).fill('');
   const cells = [...guess, ...emptyCells];
 
@@ -96,13 +96,13 @@ const CurrentRow = ({ guess, isJiggling, MAX_WORD_LENGTH }) => {
   return (
     <div className={classes} style={{"grid-template-columns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>
       {cells.map((letter, index) => (
-        <Cell key={index} value={letter} wordlength={MAX_WORD_LENGTH} />
+        <Cell key={index} value={letter} wordlength={MAX_WORD_LENGTH} guesslength={guesslength} />
       ))}
     </div>
   );
 };
 
-const CompletedRow = ({ guess, getGuessStatuses, MAX_WORD_LENGTH}) => {
+const CompletedRow = ({ guess, getGuessStatuses, MAX_WORD_LENGTH, guesslength}) => {
   const cells = guess.split('');
   const statuses = getGuessStatuses(guess);
 
@@ -116,19 +116,20 @@ const CompletedRow = ({ guess, getGuessStatuses, MAX_WORD_LENGTH}) => {
           isCompleted
           status={statuses[index]}
           wordlength={MAX_WORD_LENGTH}
+          guesslength={guesslength}
         />
       ))}
     </div>
   );
 };
 
-const EmptyRow = ({MAX_WORD_LENGTH}) => {
+const EmptyRow = ({MAX_WORD_LENGTH, guesslength}) => {
   const cells = Array(MAX_WORD_LENGTH).fill();
 
   return (
     <div className={styles.row} style={{"grid-template-columns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>
       {cells.map((_, index) => (
-        <Cell key={index} wordlength={MAX_WORD_LENGTH}/>
+        <Cell key={index} wordlength={MAX_WORD_LENGTH} guesslength={guesslength}/>
       ))}
     </div>
   );
