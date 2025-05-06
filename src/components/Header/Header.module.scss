@@ -5,12 +5,12 @@ header {
 
 .butcon, .butcon2  {
   display: flex;
-  width: "30%";
+  width: 30%;
   gap: 0px;
 }
 
 .butcon2 {
-  justify-content: 'flex-end';
+  justify-content: flex-end;
 }
 
 h1 {
