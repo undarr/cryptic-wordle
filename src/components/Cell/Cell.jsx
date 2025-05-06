@@ -6,15 +6,27 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, gues
   var height;
   var fs;
   if (window.innerWidth <= 480) {
-    width = Math.min(55,Math.floor((window.innerWidth-100)/wordlength));
-    height = Math.min(55,Math.floor((window.innerHeight*0.5)/guesslength));
-    fs = `${Math.round(height*26/55)/10}rem`;
-
+    if (infocell==="true") {
+      width = 55;
+      height = 55;
+      fs = "2.4rem";
+    }
+    else {
+      width = Math.min(55,Math.floor((window.innerWidth-100)/wordlength));
+      height = Math.min(55,Math.floor((window.innerHeight*0.3)/guesslength));
+      fs = `${Math.round(height*26/55)/10}rem`;
+    }
   } else {
-    width = Math.min(60,Math.floor((window.innerWidth-100)/wordlength));
-    height = Math.min(60,Math.floor((window.innerHeight*0.3)/guesslength));
-    console.log(height);
-    fs = `${Math.round(height*26/60)/10}rem`;
+    if (infocell==="true") {
+      width = 60;
+      height = 60;
+      fs = "2.6rem";
+    }
+    else {
+      width = Math.min(60,Math.floor((window.innerWidth-100)/wordlength));
+      height = Math.min(60,Math.floor((window.innerHeight*0.3)/guesslength));
+      fs = `${Math.round(height*26/60)/10}rem`;
+    }
   }
 
   const classes = classNames({
@@ -24,13 +36,12 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, gues
     [styles.correct]: status === 'correct',
     [styles.fill]: value && value!==" ",
     [styles.reveal]: isCompleted,
-    [styles.infocell]: infocell,
   });
 
   const animationDelay = `${position * 0.35}s`;
 
   return (
-    <div className={classes} style={{ animationDelay, "width": width , "height": height, "font-size":fs}}>
+    <div className={classes} style={{animationDelay, "width": width , "height": height, "font-size": fs}}>
       <span className={styles.letter} style={{ animationDelay}}>
         {value}
       </span>

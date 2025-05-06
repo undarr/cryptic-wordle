@@ -104,6 +104,7 @@ function App() {
               setvideo(data.split(' ()minc() ')[8]);
               setanswerlength(newsol.length);
               setCurrentGuess(startguess(newsol));
+              console.log(startguess(newsol));
             })
             .catch(error => {
               console.error('Error making the request:', error);
@@ -197,7 +198,6 @@ function App() {
       setTimeout(() => showAlert('Well done', 'success'), ALERT_DELAY);
       setTimeout(() => setIsStatsModalOpen(true), ALERT_DELAY + 1000);
     } else if (guesses.length === MAX_CHALLENGES) {
-      //guesses.length === 12345) { //MAX_CHALLENGES
       setIsGameLost(true);
       setTimeout(
         () => showAlert(`The word was ${solution}`, 'error', true),
@@ -205,7 +205,7 @@ function App() {
       );
       setTimeout(() => setIsStatsModalOpen(true), ALERT_DELAY + 1000);
     } else if (guesses.length === MAX_CHALLENGES - 1) {
-      setTimeout(() => showAlert('Last chance!', 'error', true), 500);
+      setTimeout(() => showAlert('Last chance!', 'error', false), 500);
     }
     // eslint-disable-next-line
   }, [guesses]);
@@ -486,7 +486,9 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
     }
 
     setenterdisable(true);
-    setTimeout(setenterdisable(false), 500);
+    setTimeout(() => {
+      setenterdisable(false);
+    }, 500);
 
     setGuesses([...guesses, tosolu(currentGuess)]);
     setCurrentGuess(startguess(solution));
