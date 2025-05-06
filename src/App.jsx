@@ -46,8 +46,15 @@ function App() {
     solutionIndex: '',
   });
   const [clue, setclue] = useState('Loading...');
-  const [hint, sethint] = useState('Loading...');
-  const [displayhint, setdisplayhint] = useState('');
+  const [hint1, sethint1] = useState('Loading...');
+  const [hint2, sethint2] = useState('Loading...');
+  const [hint3, sethint3] = useState('Loading...');
+  const [hintt1, sethintt1] = useState('Loading...');
+  const [hintt2, sethintt2] = useState('Loading...');
+  const [hintt3, sethintt3] = useState('Loading...');
+  const [displayhint1, setdisplayhint1] = useState('');
+  const [displayhint2, setdisplayhint2] = useState('');
+  const [displayhint3, setdisplayhint3] = useState('');
   const [video, setvideo] = useState('www.example.com');
   const [solution, setsolution] = useState(WORDS[0]);
   const [solutionIndex, setsolutionIndex] = useState(0);
@@ -88,8 +95,13 @@ function App() {
               setclue(data.split(' ()minc() ')[0]);
               const newsol = data.split(' ()minc() ')[1].replace(/ /g, '-');
               setsolution(newsol);
-              sethint(data.split(' ()minc() ')[2]);
-              setvideo(data.split(' ()minc() ')[3]);
+              sethint1(data.split(' ()minc() ')[2]);
+              sethint2(data.split(' ()minc() ')[3]);
+              sethint3(data.split(' ()minc() ')[4]);
+              sethintt1(data.split(' ()minc() ')[5]);
+              sethintt2(data.split(' ()minc() ')[6]);
+              sethintt3(data.split(' ()minc() ')[7]);
+              setvideo(data.split(' ()minc() ')[8]);
               setanswerlength(newsol.length);
               setCurrentGuess(startguess(newsol));
             })
@@ -184,6 +196,7 @@ function App() {
       setTimeout(() => showAlert('Well done', 'success'), ALERT_DELAY);
       setTimeout(() => setIsStatsModalOpen(true), ALERT_DELAY + 1000);
     } else if (guesses.length === MAX_CHALLENGES) {
+      //guesses.length === 12345) { //MAX_CHALLENGES
       setIsGameLost(true);
       setTimeout(
         () => showAlert(`The word was ${solution}`, 'error', true),
@@ -353,14 +366,17 @@ function App() {
 https://ucrypticwordle.netlify.app/
 
 Cryptic Wordle
-#${solutionIndex}, ${displayhint === '' ? '🔒' : '🔓'} ${
+#${solutionIndex}, ${displayhint1 === '' ? '🔒' : '🔓'}${
+        displayhint2 === '' ? '🔒' : '🔓'
+      }${displayhint3 === '' ? '🔒' : '🔓'}, ${
         isGameLost ? 'X' : guesses.length
-      }/${MAX_CHALLENGES} 
+      }/${MAX_CHALLENGES}
 ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
 \n` + generateEmojiGrid(guesses);
 
     navigator.clipboard.writeText(textToShare);
   };
+  //${MAX_CHALLENGES}
 
   const generateEmojiGrid = guesses => {
     return guesses
@@ -402,8 +418,22 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
     setHardMode(!isHardMode);
   };
 
-  const showhint = () => {
-    setdisplayhint('Hint: ' + hint);
+  const showhint1 = () => {
+    setdisplayhint1(
+      hintt1.charAt(0).toUpperCase() + hintt1.slice(1) + ' : ' + hint1
+    );
+  };
+
+  const showhint2 = () => {
+    setdisplayhint2(
+      hintt2.charAt(0).toUpperCase() + hintt2.slice(1) + ' : ' + hint2
+    );
+  };
+
+  const showhint3 = () => {
+    setdisplayhint3(
+      hintt3.charAt(0).toUpperCase() + hintt3.slice(1) + ' : ' + hint3
+    );
   };
 
   const handleKeyDown = letter =>
@@ -463,8 +493,15 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
         setIsStatsModalOpen={setIsStatsModalOpen}
         setIsSettingsModalOpen={setIsSettingsModalOpen}
         clue={clue}
-        showhint={showhint}
-        displayhint={displayhint}
+        showhint1={showhint1}
+        showhint2={showhint2}
+        showhint3={showhint3}
+        displayhint1={displayhint1}
+        displayhint2={displayhint2}
+        displayhint3={displayhint3}
+        hinttype1={hintt1}
+        hinttype2={hintt2}
+        hinttype3={hintt3}
         showAlert={showAlert}
       />
       <Alert />
@@ -476,7 +513,10 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
         getGuessStatuses={getGuessStatuses}
         MAX_WORD_LENGTH={answerlength}
         clue={clue}
-        displayhint={displayhint}
+        displayhint1={displayhint1}
+        displayhint2={displayhint2}
+        displayhint3={displayhint3}
+        isGameWon={isGameWon}
       />
       <Keyboard
         onEnter={handleEnter}

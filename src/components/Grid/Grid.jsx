@@ -4,7 +4,11 @@ import Cell from 'components/Cell';
 import { MAX_CHALLENGES } from 'constants/settings';
 import styles from './Grid.module.scss';
 
-const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatuses, MAX_WORD_LENGTH, clue, displayhint}) => {
+const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatuses, MAX_WORD_LENGTH, clue, 
+  displayhint1, 
+  displayhint2, 
+  displayhint3,
+  isGameWon}) => {
   const empties =
     MAX_CHALLENGES > guesses.length
       ? Array(MAX_CHALLENGES - guesses.length - 1).fill()
@@ -64,14 +68,16 @@ const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatus
             </span>
         );
     })}</h2>
-      <p style={{ textAlign: 'center' }}>{displayhint}</p>
+      <p style={{ textAlign: 'center', color: "var(--color-text-primary)"}}>{displayhint1}</p>
+      <p style={{ textAlign: 'center', color: "var(--color-text-primary)"}}>{displayhint2}</p>
+      <p style={{ textAlign: 'center', color: "var(--color-text-primary)"}}>{displayhint3}</p>
       {guesses.map((guess, i) => (
         <CompletedRow key={i} guess={guess} getGuessStatuses={getGuessStatuses} MAX_WORD_LENGTH={MAX_WORD_LENGTH}/>
       ))}
-      {guesses.length < MAX_CHALLENGES && (
+      {!isGameWon && guesses.length < MAX_CHALLENGES && (
         <CurrentRow guess={currentGuess} isJiggling={isJiggling} MAX_WORD_LENGTH={MAX_WORD_LENGTH}/>
       )}
-      {empties.map((_, i) => (
+      {true ? <></> : empties.map((_, i) => ( //infinte guesses
         <EmptyRow key={i} MAX_WORD_LENGTH={MAX_WORD_LENGTH} />
       ))}
     </div>
@@ -122,7 +128,7 @@ const EmptyRow = ({MAX_WORD_LENGTH}) => {
   return (
     <div className={styles.row} style={{"grid-template-columns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>
       {cells.map((_, index) => (
-        <Cell key={index} wordlength={MAX_WORD_LENGTH} />
+        <Cell key={index} wordlength={MAX_WORD_LENGTH}/>
       ))}
     </div>
   );

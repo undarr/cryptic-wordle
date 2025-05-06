@@ -1,4 +1,5 @@
-import { BsBarChart, BsGear, BsInfoCircle, BsFillQuestionDiamondFill, BsQuestionDiamond, BsShareFill} from 'react-icons/bs';
+import { BsBarChart, BsGear, BsInfoCircle, BsShareFill} from 'react-icons/bs';
+import styles from './Header.module.scss';
 import './Header.module.scss';
 
 const Header = ({
@@ -6,23 +7,35 @@ const Header = ({
   setIsStatsModalOpen,
   setIsSettingsModalOpen,
   clue,
-  showhint,
-  displayhint,
+  showhint1,
+  showhint2,
+  showhint3,
+  displayhint1,
+  displayhint2,
+  displayhint3,
+  hinttype1,
+  hinttype2,
+  hinttype3,
   showAlert
 }) => {
   return (
     <header>
-      <div>
-        <button onClick={() => setIsInfoModalOpen(true)}>
+      <div style={{display: 'flex', gap: '0px', width:"30%"}}>
+        <button style={{height: "1.6rem"}} onClick={() => setIsInfoModalOpen(true)}>
           <BsInfoCircle size="1.6rem" color="var(--color-icon)" />
         </button>
-        <button onClick={() => showhint(true)}>
-          {displayhint==='' ? <BsQuestionDiamond  size="1.6rem" color="var(--color-icon)" /> :
-          <BsFillQuestionDiamondFill  size="1.6rem" color="var(--color-icon)" />}
+        <button className={displayhint1==='' ? styles.rlogo1 : styles.rlogo2} onClick={() => showhint1(true)}>
+          {hinttype1.charAt(0).toLowerCase()}
+        </button>
+        <button className={displayhint2==='' ? styles.rlogo1 : styles.rlogo2} onClick={() => showhint2(true)}>
+          {hinttype2.charAt(0).toLowerCase()}
+        </button>
+        <button className={displayhint3==='' ? styles.rlogo1 : styles.rlogo2} onClick={() => showhint3(true)}>
+          {hinttype3.charAt(0).toLowerCase()}
         </button>
       </div>
       <h1><a href="https://www.minutecryptic.com/" target="_blank" rel="noopener noreferrer">CRYPTIC</a> <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener noreferrer">WORDLE</a></h1>
-      <div>
+      <div style={{ display: 'flex', gap: '0px', width:"30%", justifyContent: 'flex-end'}}>
         <button onClick={() => {navigator.clipboard.writeText(clue+"\nhttps://ucrypticwordle.netlify.app/"); showAlert('Clue copied to clipboard', 'success');}}>
           <BsShareFill size="1.6rem" color="var(--color-icon)"/>
         </button>

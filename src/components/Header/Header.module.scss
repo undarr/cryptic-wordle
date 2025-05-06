@@ -5,7 +5,6 @@ header {
 
 h1 {
   font-size: 2.3rem;
-  margin-left: 2.5rem;
   color: var(--color-text-primary);
 }
 
@@ -17,6 +16,34 @@ button {
   border: none;
 }
 
+.rlogo1 {
+  width: 1.6rem;
+  height: 1.6rem;
+  background-color: var(--color-background);
+  border: 2px solid var(--color-icon);
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-icon);
+}
+
+.rlogo2 {
+  width: 1.6rem;
+  height: 1.6rem;
+  background-color: var(--color-icon);
+  border: 2px solid var(--color-icon);
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-background);
+}
+
 @media screen and (max-width: 480px) {
   h1 {
     font-size: 1.5rem;
@@ -24,7 +51,7 @@ button {
 }
 
 a {
-  color: white; /* Change to your desired color */
+  color: var(--color-text-primary); /* Change to your desired color */
   text-decoration: none;
 }
 

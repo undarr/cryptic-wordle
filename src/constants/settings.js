@@ -1,2 +1,2 @@
-export const MAX_CHALLENGES = 5;
+export const MAX_CHALLENGES = 10;
 export const ALERT_DELAY = 2000;
