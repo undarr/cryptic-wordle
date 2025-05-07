@@ -4,7 +4,7 @@ import useOnClickOutside from 'hooks/useOnClickOutside';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import styles from './Modal.module.scss';
 
-const Modal = ({ isOpen, onClose, title, children }) => {
+const Modal = ({ isOpen, onClose, title, children, nogap}) => {
   const ref = useRef();
 
   useOnClickOutside(ref, onClose);
@@ -16,7 +16,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
           <button className={styles.close} onClick={onClose}>
             <RiCloseCircleLine size="1.6rem" color="var(--color-icon)" />
           </button>
-          <h2 className={styles.title}>{title}</h2>
+          <h2 className={nogap===true ? styles.title2 : styles.title}>{title}</h2>
           {children}
         </div>
       </div>

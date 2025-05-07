@@ -3,6 +3,7 @@ import Header from 'components/Header';
 import Grid from 'components/Grid';
 import Keyboard from 'components/Keyboard';
 import Alert from 'components/Alert';
+import HintModal from 'components/HintModal';
 import InfoModal from 'components/InfoModal';
 import SettingModal from 'components/SettingModal';
 import StatsModal from 'components/StatsModal';
@@ -41,25 +42,69 @@ function App() {
     }
     return s;
   }
+  /*
   const [boardState, setBoardState] = useLocalStorage('boardState', {
     guesses: [],
     solutionIndex: '',
   });
-  const [clue, setclue] = useState('Loading...');
-  const [hint1, sethint1] = useState('Loading...');
-  const [hint2, sethint2] = useState('Loading...');
-  const [hint3, sethint3] = useState('Loading...');
-  const [hintt1, sethintt1] = useState('-Loading...');
-  const [hintt2, sethintt2] = useState('-Loading...');
-  const [hintt3, sethintt3] = useState('-Loading...');
+  */
+  const [sclue, setsclue] = useState('M');
   const [displayhint1, setdisplayhint1] = useState('');
   const [displayhint2, setdisplayhint2] = useState('');
   const [displayhint3, setdisplayhint3] = useState('');
-  const [video, setvideo] = useState('www.example.com');
   const [solution, setsolution] = useState(WORDS[0]);
+
+  const [mclue, setmclue] = useState('Loading...');
+  const [mhint1, setmhint1] = useState('Loading...');
+  const [mhint2, setmhint2] = useState('Loading...');
+  const [mhint3, setmhint3] = useState('Loading...');
+  const [mhintt1, setmhintt1] = useState('-Loading...');
+  const [mhintt2, setmhintt2] = useState('-Loading...');
+  const [mhintt3, setmhintt3] = useState('-Loading...');
+  const [mdisplayhint1, setmdisplayhint1] = useState('');
+  const [mdisplayhint2, setmdisplayhint2] = useState('');
+  const [mdisplayhint3, setmdisplayhint3] = useState('');
+  const [mvideo, setmvideo] = useState('www.example.com');
+  const [msolution, setmsolution] = useState(WORDS[0]);
+  const [manswerlength, setmanswerlength] = useState(0);
+
+  const [dclue, setdclue] = useState('Loading...');
+  const [dhint, setdhint] = useState('Loading...');
+  const [ddisplayhint, setddisplayhint] = useState('');
+  const [dvideo, setdvideo] = useState('Loading...');
+  const [dsolution, setdsolution] = useState(WORDS[0]);
+  const [danswerlength, setdanswerlength] = useState(0);
+
+  function swapclue(x = '') {
+    if (x === 'D') {
+      setsclue('D');
+      setsolution(dsolution);
+      setdisplayhint1(ddisplayhint);
+      setdisplayhint2('');
+      setdisplayhint3('');
+    } else if (x === 'M') {
+      setsclue('M');
+      setsolution(msolution);
+      setdisplayhint1(mdisplayhint1);
+      setdisplayhint2(mdisplayhint2);
+      setdisplayhint3(mdisplayhint3);
+    } else if (sclue === 'M') {
+      setsclue('D');
+      setsolution(dsolution);
+      setdisplayhint1(ddisplayhint);
+      setdisplayhint2('');
+      setdisplayhint3('');
+    } else if (sclue === 'D') {
+      setsclue('M');
+      setsolution(msolution);
+      setdisplayhint1(mdisplayhint1);
+      setdisplayhint2(mdisplayhint2);
+      setdisplayhint3(mdisplayhint3);
+    }
+  }
+
   const [solutionIndex, setsolutionIndex] = useState(0);
   const [tomorrow, settomorrow] = useState(1);
-  const [answerlength, setanswerlength] = useState(0);
   useEffect(() => {
     const epochMs = 1740355200000;
     const now = Date.now();
@@ -92,19 +137,27 @@ function App() {
             .then(response => {
               const data =
                 response.data.result.capturedTexts.clue.split(' ()big() ')[0];
-              setclue(data.split(' ()minc() ')[0]);
+              const ddata =
+                response.data.result.capturedTexts.clue.split(' ()big() ')[1];
               const newsol = data.split(' ()minc() ')[1].replace(/ /g, '-');
               setsolution(newsol);
-              sethint1(data.split(' ()minc() ')[2]);
-              sethint2(data.split(' ()minc() ')[3]);
-              sethint3(data.split(' ()minc() ')[4]);
-              sethintt1(data.split(' ()minc() ')[5]);
-              sethintt2(data.split(' ()minc() ')[6]);
-              sethintt3(data.split(' ()minc() ')[7]);
-              setvideo(data.split(' ()minc() ')[8]);
-              setanswerlength(newsol.length);
-              setCurrentGuess(startguess(newsol));
-              console.log(startguess(newsol));
+
+              setmclue(data.split(' ()minc() ')[0]);
+              setmsolution(newsol);
+              setmhint1(data.split(' ()minc() ')[2]);
+              setmhint2(data.split(' ()minc() ')[3]);
+              setmhint3(data.split(' ()minc() ')[4]);
+              setmhintt1(data.split(' ()minc() ')[5]);
+              setmhintt2(data.split(' ()minc() ')[6]);
+              setmhintt3(data.split(' ()minc() ')[7]);
+              setmvideo(data.split(' ()minc() ')[8]);
+              setmanswerlength(newsol.length);
+
+              setdclue(ddata.split(' ()dc() ')[1]);
+              setdsolution(ddata.split(' ()dc() ')[0]);
+              setdhint(ddata.split(' ()dc() ')[3]);
+              setdvideo(ddata.split(' ()dc() ')[2]);
+              setdanswerlength(ddata.split(' ()dc() ')[0].length);
             })
             .catch(error => {
               console.error('Error making the request:', error);
@@ -117,7 +170,7 @@ function App() {
           };
           const url =
             'https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks';
-          setclue('Clue not found 404');
+          setmclue('Clue not found 404');
           setTimeout(() => {
             axios
               .post(url, payload, { headers })
@@ -127,10 +180,35 @@ function App() {
                 axios
                   .get(url, { headers })
                   .then(response => {
-                    const clue = response.data.result.capturedTexts.clue;
-                    setclue(clue.split(' ()minc() ')[0]);
-                    setsolution(clue.split(' ()minc() ')[1]);
-                    setanswerlength(clue.split(' ()minc() ')[1].length);
+                    const data =
+                      response.data.result.capturedTexts.clue.split(
+                        ' ()big() '
+                      )[0];
+                    const ddata =
+                      response.data.result.capturedTexts.clue.split(
+                        ' ()big() '
+                      )[1];
+                    const newsol = data
+                      .split(' ()minc() ')[1]
+                      .replace(/ /g, '-');
+                    setsolution(newsol);
+
+                    setmclue(data.split(' ()minc() ')[0]);
+                    setmsolution(newsol);
+                    setmhint1(data.split(' ()minc() ')[2]);
+                    setmhint2(data.split(' ()minc() ')[3]);
+                    setmhint3(data.split(' ()minc() ')[4]);
+                    setmhintt1(data.split(' ()minc() ')[5]);
+                    setmhintt2(data.split(' ()minc() ')[6]);
+                    setmhintt3(data.split(' ()minc() ')[7]);
+                    setmvideo(data.split(' ()minc() ')[8]);
+                    setmanswerlength(newsol.length);
+
+                    setdclue(ddata.split(' ()dc() ')[1]);
+                    setdsolution(ddata.split(' ()dc() ')[0]);
+                    setdhint(ddata.split(' ()dc() ')[3]);
+                    setdvideo(ddata.split(' ()dc() ')[2]);
+                    setdanswerlength(ddata.split(' ()dc() ')[0].length);
                   })
                   .catch(error => {
                     console.error('Error making the request:', error);
@@ -161,11 +239,16 @@ function App() {
     totalGames: 0,
     successRate: 0,
   });
-  const [currentGuess, setCurrentGuess] = useState('');
-  const [guesses, setGuesses] = useState([]);
+  const [mcurrentGuess, setmCurrentGuess] = useState('');
+  const [dcurrentGuess, setdCurrentGuess] = useState('');
+  const [mguesses, setmGuesses] = useState([]);
+  const [dguesses, setdGuesses] = useState([]);
+  const [ismGameWon, setIsmGameWon] = useState(false);
+  const [isdGameWon, setIsdGameWon] = useState(false);
+  const [ismGameLost, setIsmGameLost] = useState(false);
+  const [isdGameLost, setIsdGameLost] = useState(false);
   const [isJiggling, setIsJiggling] = useState(false);
-  const [isGameWon, setIsGameWon] = useState(false);
-  const [isGameLost, setIsGameLost] = useState(false);
+  const [isHintModalOpen, setIsHintModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -177,11 +260,12 @@ function App() {
 
   // Show welcome modal
   useEffect(() => {
-    if (!boardState.solutionIndex)
-      setTimeout(() => setIsInfoModalOpen(true), 1000);
+    //if (!boardState.solutionIndex)
+    setTimeout(() => setIsInfoModalOpen(true), 1000);
     // eslint-disable-next-line
   }, []);
 
+  /*
   // Save boardState to localStorage
   useEffect(() => {
     setBoardState({
@@ -190,15 +274,30 @@ function App() {
     });
     // eslint-disable-next-line
   }, [guesses]);
+  */
 
   // Check game winning or losing
   useEffect(() => {
+    var guesses;
+    if (sclue === 'M') {
+      guesses = mguesses;
+    } else {
+      guesses = dguesses;
+    }
     if (guesses.includes(solution.toUpperCase())) {
-      setIsGameWon(true);
+      if (sclue === 'M') {
+        setIsmGameWon(true);
+      } else {
+        setIsdGameWon(true);
+      }
       setTimeout(() => showAlert('Well done', 'success'), ALERT_DELAY);
       setTimeout(() => setIsStatsModalOpen(true), ALERT_DELAY + 1000);
     } else if (guesses.length === MAX_CHALLENGES) {
-      setIsGameLost(true);
+      if (sclue === 'M') {
+        setIsmGameLost(true);
+      } else {
+        setIsdGameLost(true);
+      }
       setTimeout(
         () => showAlert(`The word was ${solution}`, 'error', true),
         ALERT_DELAY
@@ -208,7 +307,7 @@ function App() {
       setTimeout(() => showAlert('Last chance!', 'error', false), 500);
     }
     // eslint-disable-next-line
-  }, [guesses]);
+  }, [mguesses, dguesses]);
 
   useEffect(() => {
     if (isDarkMode) document.body.setAttribute('data-theme', 'dark');
@@ -237,9 +336,9 @@ function App() {
     );
   };
 
-  const getGuessStatuses = guess => {
+  const getGuessStatuses = (guess, sol) => {
     const splitGuess = guess.toLowerCase().split('');
-    const splitSolution = solution.split('');
+    const splitSolution = sol.split('');
 
     const statuses = [];
     const solutionCharsTaken = splitSolution.map(_ => false);
@@ -363,28 +462,38 @@ function App() {
     );
   };
 
-  const shareStatus = (guesses, isGameLost, isHardMode) => {
-    const textToShare =
-      `${clue}
+  const shareStatus = () => {
+    const textToShare = `Cryptic Wordle
 https://ucrypticwordle.netlify.app/
 
-Cryptic Wordle
-#${solutionIndex}, ${displayhint1 === '' ? '🔒' : '🔓'}${
-        displayhint2 === '' ? '🔒' : '🔓'
-      }${displayhint3 === '' ? '🔒' : '🔓'}, ${
-        isGameLost ? 'X' : guesses.length
-      }/${MAX_CHALLENGES}
-${isHardMode ? 'Hard Mode' : 'Normal Mode'}
-\n` + generateEmojiGrid(guesses);
+MCryptic Wordle #${solutionIndex}
+- ${mclue}
+${
+  ismGameLost || ismGameWon
+    ? `✨ ${
+        ismGameLost ? 'X' : mguesses.length
+      }/${MAX_CHALLENGES} guesses with X hints!
+${generateEmojiGrid(mguesses, msolution)}`
+    : '❓ Unattempted/Unfinished'
+}
 
+DCryptic Wordle #${solutionIndex - 75}
+- ${dclue}
+${
+  isdGameLost || isdGameWon
+    ? `✨ ${
+        isdGameLost ? 'X' : dguesses.length
+      }/${MAX_CHALLENGES} guesses with X hints!
+${generateEmojiGrid(dguesses, dsolution)}`
+    : '❓ Unattempted/Unfinished'
+}`;
     navigator.clipboard.writeText(textToShare);
   };
-  //${MAX_CHALLENGES}
 
-  const generateEmojiGrid = guesses => {
+  const generateEmojiGrid = (guesses, sol) => {
     return guesses
       .map(guess => {
-        const status = getGuessStatuses(guess);
+        const status = getGuessStatuses(guess, sol);
         const splitGuess = guess.split('');
 
         return splitGuess
@@ -422,41 +531,138 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
   };
 
   const showhint1 = () => {
-    setdisplayhint1(
-      hintt1.charAt(0).toUpperCase() + hintt1.slice(1) + ' : ' + hint1
-    );
+    if (sclue === 'M') {
+      setmdisplayhint1(
+        mhintt1.charAt(0).toUpperCase() + mhintt1.slice(1) + ' : ' + mhint1
+      );
+      setdisplayhint1(
+        mhintt1.charAt(0).toUpperCase() + mhintt1.slice(1) + ' : ' + mhint1
+      );
+    }
+    if (sclue === 'D') {
+      setddisplayhint('Definition : "' + dhint + '"');
+      setdisplayhint1('Definition : "' + dhint + '"');
+    }
   };
 
   const showhint2 = () => {
-    setdisplayhint2(
-      hintt2.charAt(0).toUpperCase() + hintt2.slice(1) + ' : ' + hint2
-    );
+    if (sclue === 'M') {
+      setmdisplayhint2(
+        mhintt2.charAt(0).toUpperCase() + mhintt2.slice(1) + ' : ' + mhint2
+      );
+      setdisplayhint2(
+        mhintt2.charAt(0).toUpperCase() + mhintt2.slice(1) + ' : ' + mhint2
+      );
+    }
+    if (sclue === 'D') {
+      setdisplayhint2('');
+    }
   };
 
   const showhint3 = () => {
-    setdisplayhint3(
-      hintt3.charAt(0).toUpperCase() + hintt3.slice(1) + ' : ' + hint3
-    );
+    if (sclue === 'M') {
+      setmdisplayhint3(
+        mhintt3.charAt(0).toUpperCase() + mhintt3.slice(1) + ' : ' + mhint3
+      );
+      setdisplayhint3(
+        mhintt3.charAt(0).toUpperCase() + mhintt3.slice(1) + ' : ' + mhint3
+      );
+    }
+    if (sclue === 'D') {
+      setdisplayhint3('');
+    }
   };
 
-  const handleKeyDown = letter =>
-    currentGuess.length < answerlength &&
-    !isGameWon &&
-    setCurrentGuess(currentGuess + letter);
+  const genmsg = l => {
+    if (l === 'M') {
+      const hintused =
+        (mdisplayhint1 === '' ? 0 : 1) +
+        (mdisplayhint2 === '' ? 0 : 1) +
+        (mdisplayhint3 === '' ? 0 : 1);
+      return `${ismGameLost ? '💀' : ismGameWon ? '✨' : '🤔 At'} ${
+        ismGameLost ? 'X' : mguesses.length
+      }/${MAX_CHALLENGES} guesses with ${hintused}/3 hints!`;
+    }
+    if (l === 'D') {
+      const hintused = ddisplayhint === '' ? 0 : 1;
+      return `${isdGameLost ? '💀' : isdGameWon ? '✨' : '🤔 At'} ${
+        isdGameLost ? 'X' : dguesses.length
+      }/${MAX_CHALLENGES} guesses with ${hintused}/1 hints!`;
+    }
+  };
+
+  const gensharemsg = () => {
+    return `Cryptic Wordle
+https://ucrypticwordle.netlify.app/
+
+MCryptic Wordle #${solutionIndex}
+- ${mclue}
+
+DCryptic Wordle #${solutionIndex - 75}
+- ${dclue}`;
+  };
+
+  const handleKeyDown = letter => {
+    var currentGuess;
+    if (sclue === 'M') {
+      currentGuess = mcurrentGuess;
+    } else {
+      currentGuess = dcurrentGuess;
+    }
+    var isGameWon;
+    if (sclue === 'M') {
+      isGameWon = ismGameWon;
+    } else {
+      isGameWon = isdGameWon;
+    }
+    if (
+      currentGuess.length < (sclue === 'M' ? manswerlength : danswerlength) &&
+      !isGameWon
+    ) {
+      if (sclue === 'M') {
+        setmCurrentGuess(currentGuess + letter);
+      } else {
+        setdCurrentGuess(currentGuess + letter);
+      }
+    }
+  };
 
   const handleDelete = () => {
+    var currentGuess;
+    if (sclue === 'M') {
+      currentGuess = mcurrentGuess;
+    } else {
+      currentGuess = dcurrentGuess;
+    }
     if (
       currentGuess.length !== 0 &&
       isNaN(currentGuess[currentGuess.length - 1])
     ) {
-      setCurrentGuess(currentGuess.slice(0, currentGuess.length - 1));
+      if (sclue === 'M') {
+        setmCurrentGuess(currentGuess.slice(0, currentGuess.length - 1));
+      } else {
+        setdCurrentGuess(currentGuess.slice(0, currentGuess.length - 1));
+      }
     }
   };
 
   const handleEnter = () => {
-    if (isGameWon || isGameLost || enterdisable) return;
+    if (sclue === 'M' && (ismGameWon || ismGameLost || enterdisable)) return;
+    if (sclue === 'D' && (isdGameWon || isdGameLost || enterdisable)) return;
+    var currentGuess;
+    if (sclue === 'M') {
+      currentGuess = mcurrentGuess;
+    } else {
+      currentGuess = dcurrentGuess;
+    }
+    var guesses;
+    if (sclue === 'M') {
+      guesses = mguesses;
+    } else {
+      guesses = dguesses;
+    }
 
-    if (currentGuess.length < answerlength) {
+    if (currentGuess.length < (sclue === 'M' ? manswerlength : danswerlength)) {
       setIsJiggling(true);
       return showAlert('Not enough letters', 'error');
     }
@@ -490,48 +696,79 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
       setenterdisable(false);
     }, 500);
 
-    setGuesses([...guesses, tosolu(currentGuess)]);
-    setCurrentGuess(startguess(solution));
+    if (sclue === 'M') {
+      setmGuesses([...guesses, tosolu(currentGuess)]);
+    } else if (sclue === 'D') {
+      setdGuesses([...guesses, tosolu(currentGuess)]);
+    }
+    if (sclue === 'M') {
+      setmCurrentGuess(startguess(solution));
+    } else if (sclue === 'D') {
+      setdCurrentGuess(startguess(solution));
+    }
   };
 
   return (
     <div className={styles.container}>
       <Header
+        setIsHintModalOpen={setIsHintModalOpen}
         setIsInfoModalOpen={setIsInfoModalOpen}
         setIsStatsModalOpen={setIsStatsModalOpen}
         setIsSettingsModalOpen={setIsSettingsModalOpen}
-        clue={clue}
-        showhint1={showhint1}
-        showhint2={showhint2}
-        showhint3={showhint3}
-        displayhint1={displayhint1}
-        displayhint2={displayhint2}
-        displayhint3={displayhint3}
-        hinttype1={hintt1}
-        hinttype2={hintt2}
-        hinttype3={hintt3}
+        sharemsg={gensharemsg()}
         showAlert={showAlert}
+        swapclue={swapclue}
+        sclue={sclue}
       />
       <Alert />
       <Grid
-        currentGuess={tosolu(currentGuess)}
-        guesses={guesses}
+        currentGuess={tosolu(mcurrentGuess)}
+        guesses={mguesses}
         isJiggling={isJiggling}
         setIsJiggling={setIsJiggling}
         getGuessStatuses={getGuessStatuses}
-        MAX_WORD_LENGTH={answerlength}
-        clue={clue}
-        displayhint1={displayhint1}
-        displayhint2={displayhint2}
-        displayhint3={displayhint3}
-        isGameWon={isGameWon}
+        MAX_WORD_LENGTH={manswerlength}
+        clue={mclue}
+        sol={msolution}
+        isGameWon={ismGameWon}
+        hide={sclue !== 'M'}
+      />
+      <Grid
+        currentGuess={tosolu(dcurrentGuess)}
+        guesses={dguesses}
+        isJiggling={isJiggling}
+        setIsJiggling={setIsJiggling}
+        getGuessStatuses={getGuessStatuses}
+        MAX_WORD_LENGTH={danswerlength}
+        clue={dclue}
+        displayhint1={ddisplayhint}
+        displayhint2=""
+        displayhint3=""
+        sol={dsolution}
+        isGameWon={isdGameWon}
+        hide={sclue !== 'D'}
       />
       <Keyboard
         onEnter={handleEnter}
         onDelete={handleDelete}
         onKeyDown={handleKeyDown}
-        guesses={guesses}
+        guesses={sclue === 'M' ? mguesses : dguesses}
         getStatuses={getStatuses}
+      />
+      <HintModal
+        isOpen={isHintModalOpen}
+        onClose={() => setIsHintModalOpen(false)}
+        sclue={sclue}
+        clue={sclue === 'M' ? mclue : dclue}
+        sh1={showhint1}
+        sh2={showhint2}
+        sh3={showhint3}
+        dh1={displayhint1}
+        dh2={displayhint2}
+        dh3={displayhint3}
+        ht1={mhintt1}
+        ht2={mhintt2}
+        ht3={mhintt3}
       />
       <InfoModal
         isOpen={isInfoModalOpen}
@@ -551,15 +788,25 @@ ${isHardMode ? 'Hard Mode' : 'Normal Mode'}
         isOpen={isStatsModalOpen}
         onClose={() => setIsStatsModalOpen(false)}
         gameStats={stats}
-        numberOfGuessesMade={guesses.length}
-        isGameWon={isGameWon}
-        isGameLost={isGameLost}
+        numberOfGuessesMade={mguesses.length}
+        ismGameWon={ismGameWon}
+        ismGameLost={ismGameLost}
+        isdGameWon={isdGameWon}
+        isdGameLost={isdGameLost}
         isHardMode={isHardMode}
-        guesses={guesses}
+        guesses={mguesses}
         showAlert={showAlert}
         tomorrow={tomorrow}
         shareStatus={shareStatus}
-        v={video}
+        mclue={mclue}
+        mv={mvideo}
+        msol={msolution}
+        mmsg={genmsg('M')}
+        dclue={dclue}
+        dv={dvideo}
+        dsol={dsolution}
+        dmsg={genmsg('D')}
+        swap={swapclue}
       />
     </div>
   );

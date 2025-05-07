@@ -9,7 +9,7 @@ const Keyboard = ({ onEnter, onDelete, onKeyDown, guesses, getStatuses }) => {
     const listener = e => {
       const key = e.key.toUpperCase();
       if (key === 'BACKSPACE') return onDelete();
-      if (key === 'ENTER') return onEnter();
+      if (key === 'ENTER') {e.preventDefault(); return onEnter();}
       if (key.length === 1 && key >= 'A' && key <= 'Z') onKeyDown(key);
     };
 

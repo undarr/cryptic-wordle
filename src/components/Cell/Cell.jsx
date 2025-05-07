@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import styles from './Cell.module.scss';
 
-const Cell = ({ value, status, position, isCompleted, wordlength, infocell, guesslength}) => {
+const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hintcell, guesslength, onclick}) => {
   var width;
   var height;
   var fs;
@@ -11,9 +11,13 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, gues
       height = 55;
       fs = "2.4rem";
     }
+    else if (hintcell==="true") {
+      height = 55;
+      fs = "2.4rem";
+    }
     else {
       width = Math.min(55,Math.floor((window.innerWidth-100)/wordlength));
-      height = Math.min(55,Math.floor((window.innerHeight*0.3)/guesslength));
+      height = Math.min(55,Math.floor((window.innerHeight*0.35)/guesslength));
       fs = `${Math.round(height*26/55)/10}rem`;
     }
   } else {
@@ -22,9 +26,13 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, gues
       height = 60;
       fs = "2.6rem";
     }
+    else if (hintcell==="true") {
+      height = 60;
+      fs = "2.6rem";
+    }
     else {
       width = Math.min(60,Math.floor((window.innerWidth-100)/wordlength));
-      height = Math.min(60,Math.floor((window.innerHeight*0.3)/guesslength));
+      height = Math.min(60,Math.floor((window.innerHeight*0.35)/guesslength));
       fs = `${Math.round(height*26/60)/10}rem`;
     }
   }
@@ -41,8 +49,8 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, gues
   const animationDelay = `${position * 0.35}s`;
 
   return (
-    <div className={classes} style={{animationDelay, "width": width , "height": height, "font-size": fs}}>
-      <span className={styles.letter} style={{ animationDelay}}>
+    <div className={classes} style={{animationDelay, "width": width , "height": height, "font-size": fs}} onclick={onclick}>
+      <span className={styles.letter} style={{animationDelay}}>
         {value}
       </span>
     </div>

@@ -8,30 +8,32 @@ const StatsModal = ({
   onClose,
   gameStats,
   numberOfGuessesMade,
-  isGameWon,
-  isGameLost,
+  ismGameWon,
+  ismGameLost,
+  isdGameWon,
+  isdGameLost,
   isHardMode,
   guesses,
   showAlert,
   tomorrow,
   shareStatus,
-  v
+  mclue, mv, msol, mmsg, dclue, dv, dsol, dmsg, swap
 }) => {
   const handleShare = () => {
-    shareStatus(guesses, isGameLost, isHardMode);
+    shareStatus();
     showAlert('Game copied to clipboard', 'success');
   };
 
   return (
-    <Modal title="Statistics" isOpen={isOpen} onClose={onClose}>
-      <div className={styles.statsBar}>
+    <Modal title="Status" isOpen={isOpen} onClose={onClose} nogap={true}>
+      {true ? <></> : <div className={styles.statsBar}>
         <StatItem label="Played" value={gameStats.totalGames} />
         <StatItem label="Win Rate %" value={gameStats.successRate} />
         <StatItem label="Current Streak" value={gameStats.currentStreak} />
         <StatItem label="Best Streak" value={gameStats.bestStreak} />
-      </div>
-      <h2>Guess Distribution</h2>
-      <div className={styles.winDistribution}>
+      </div>}
+      {true ? <></> : <><h2>Guess Distribution (del)</h2>
+        <div className={styles.winDistribution}>
         {gameStats.winDistribution.map((value, i) => (
           <Progress
             key={i}
@@ -40,14 +42,25 @@ const StatsModal = ({
             size={90 * (value / Math.max(...gameStats.winDistribution))}
             label={String(value)}
           />
-        ))}
-      </div>
-      {(isGameWon || isGameLost) && (<>
-        <div className={styles.result}>
-        <div className={styles.share}><button onClick={() => {window.open(v, '_blank');}}>See Explanation</button></div></div>
-        <div className={styles.result}>
+      ))}</div></>}
+
+      <h2>Minute Cryptic</h2>
+      <h3 style={{"marginBottom" : 0}}>{mclue}</h3>
+      <h3 style={{"marginBottom" : 0}}>{mmsg}</h3>
+      {(ismGameWon || ismGameLost) ? <div className={styles.bgrid}><div className={styles.result}><button onClick={() => {window.open("https://www.google.com/search?q="+msol+"+definition", '_blank');}}>Definition</button></div>
+      <div className={styles.result}><button onClick={() => {window.open(mv, '_blank');}}>Explanation</button></div></div> :
+      <div className={styles.result}><button onClick={() => {swap("M"); onClose();}}>Attempt</button></div>}
+      <h2>Daily Cryptic</h2>
+      <h3 style={{"marginBottom" : 0}}>{dclue}</h3>
+      <h3 style={{"marginBottom" : 0}}>{dmsg}</h3>
+      {(isdGameWon || isdGameLost) ? <div className={styles.bgrid}><div className={styles.result}><button onClick={() => {window.open("https://www.google.com/search?q="+dsol+"+definition", '_blank');}}>Definition</button></div>
+      <div className={styles.result}><button onClick={() => {window.open(dv, '_blank');}}>Explanation</button></div></div> :
+      <div className={styles.result}><button onClick={() => {swap("D"); onClose();}}>Attempt</button></div>}
+
+      {(ismGameWon || ismGameLost || isdGameWon || isdGameLost) && (<>
+        <div className={styles.bgrid}>
           <div className={styles.countDown}>
-            <h2>Next word in</h2>
+            <h2 style={{"width" : "100%"}}>Next word in</h2>
             <CountDown
               date={tomorrow}
               daysInHours={true}

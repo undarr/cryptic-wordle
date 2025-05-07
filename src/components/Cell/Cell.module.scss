@@ -20,6 +20,7 @@
   animation-duration: 0.3s;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
+  animation-iteration-count: 1;
 
   &.absent {
     animation-name: revealAbsentCell;
@@ -118,6 +119,10 @@
 @media screen and (max-width: 480px) {
   .infocell {
     width: 55px;
+    height: 55px;
+    font-weight: 2.4rem;
+  }
+  .hintcell {
     height: 55px;
     font-weight: 2.4rem;
   }

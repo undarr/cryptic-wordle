@@ -4,11 +4,8 @@ import Cell from 'components/Cell';
 import { MAX_CHALLENGES } from 'constants/settings';
 import styles from './Grid.module.scss';
 
-const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatuses, MAX_WORD_LENGTH, clue, 
-  displayhint1, 
-  displayhint2, 
-  displayhint3,
-  isGameWon}) => {
+const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatuses, MAX_WORD_LENGTH, clue,
+  sol,isGameWon,hide}) => {
   const empties =
     MAX_CHALLENGES > guesses.length
       ? Array(MAX_CHALLENGES - guesses.length - 1).fill()
@@ -47,7 +44,7 @@ const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatus
   };
 
   return (
-    <div className={styles.grid}>
+    <div className={styles.grid} style={hide ? {"display":"none"} : {}}>
       <h2 style={{ textAlign: 'center' }}>{splitline(clue).split(' ').map((word, index) => {
         if (index!==splitline(clue).split(' ').length-1 && word!=="\n") {
             return (
@@ -68,11 +65,8 @@ const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatus
             </span>
         );
     })}</h2>
-      <p style={{ textAlign: 'center', color: "var(--color-text-primary)"}}>{displayhint1}</p>
-      <p style={{ textAlign: 'center', color: "var(--color-text-primary)"}}>{displayhint2}</p>
-      <p style={{ textAlign: 'center', color: "var(--color-text-primary)"}}>{displayhint3}</p>
       {guesses.map((guess, i) => (
-        <CompletedRow key={i} guess={guess} getGuessStatuses={getGuessStatuses} MAX_WORD_LENGTH={MAX_WORD_LENGTH} guesslength={guesses.length}/>
+        <CompletedRow key={i} guess={guess} getGuessStatuses={getGuessStatuses} MAX_WORD_LENGTH={MAX_WORD_LENGTH} guesslength={guesses.length} sol={sol}/>
       ))}
       {!isGameWon && guesses.length < MAX_CHALLENGES && (
         <CurrentRow guess={currentGuess} isJiggling={isJiggling} MAX_WORD_LENGTH={MAX_WORD_LENGTH} guesslength={guesses.length}/>
@@ -102,9 +96,9 @@ const CurrentRow = ({ guess, isJiggling, MAX_WORD_LENGTH, guesslength}) => {
   );
 };
 
-const CompletedRow = ({ guess, getGuessStatuses, MAX_WORD_LENGTH, guesslength}) => {
+const CompletedRow = ({ guess, getGuessStatuses, MAX_WORD_LENGTH, guesslength, sol}) => {
   const cells = guess.split('');
-  const statuses = getGuessStatuses(guess);
+  const statuses = getGuessStatuses(guess,sol);
 
   return (
     <div className={styles.row} style={{"grid-template-columns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>

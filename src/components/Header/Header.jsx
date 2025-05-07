@@ -1,22 +1,16 @@
-import { BsBarChart, BsGear, BsInfoCircle, BsShareFill} from 'react-icons/bs';
+import { BsBarChart, BsGear, BsInfoCircle, BsShareFill, BsQuestionDiamond} from 'react-icons/bs';
 import styles from './Header.module.scss';
 import './Header.module.scss';
 
 const Header = ({
+  setIsHintModalOpen,
   setIsInfoModalOpen,
   setIsStatsModalOpen,
   setIsSettingsModalOpen,
-  clue,
-  showhint1,
-  showhint2,
-  showhint3,
-  displayhint1,
-  displayhint2,
-  displayhint3,
-  hinttype1,
-  hinttype2,
-  hinttype3,
-  showAlert
+  sharemsg,
+  showAlert,
+  swapclue,
+  sclue
 }) => {
   return (
     <header>
@@ -24,19 +18,13 @@ const Header = ({
         <button style={{height: "1.6rem"}} onClick={() => setIsInfoModalOpen(true)}>
           <BsInfoCircle size="1.6rem" color="var(--color-icon)" />
         </button>
-        <button className={displayhint1==='' ? styles.rlogo1 : styles.rlogo2} onClick={() => showhint1(true)}>
-          {hinttype1.charAt(0).toLowerCase()}
-        </button>
-        <button className={displayhint2==='' ? styles.rlogo1 : styles.rlogo2} onClick={() => showhint2(true)}>
-          {hinttype2.charAt(0).toLowerCase()}
-        </button>
-        <button className={displayhint3==='' ? styles.rlogo1 : styles.rlogo2} onClick={() => showhint3(true)}>
-          {hinttype3.charAt(0).toLowerCase()}
+        <button style={{height: "1.6rem"}} onClick={() => setIsHintModalOpen(true)}>
+          <BsQuestionDiamond size="1.6rem" color="var(--color-icon)" />
         </button>
       </div>
-      <h1><a href="https://www.minutecryptic.com/" target="_blank" rel="noopener noreferrer">CRYPTIC</a> <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener noreferrer">WORDLE</a></h1>
+      <h1>{sclue==="M" ? <a href="https://www.minutecryptic.com/" target="_blank" rel="noopener noreferrer">MCRYPTIC</a> : <a href="https://dailycrypticle.com/dailyclue.html" target="_blank" rel="noopener noreferrer">DCRYPTIC</a>} <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener noreferrer">WORDLE</a></h1>
       <div id="div2" className={styles.butcon2}>
-        <button style={{height: "1.6rem"}} onClick={() => {navigator.clipboard.writeText(clue+"\nhttps://ucrypticwordle.netlify.app/"); showAlert('Clue copied to clipboard', 'success');}}>
+        <button style={{height: "1.6rem"}} onClick={() => {navigator.clipboard.writeText(sharemsg); showAlert('Clue copied to clipboard', 'success');}}>
           <BsShareFill size="1.6rem" color="var(--color-icon)"/>
         </button>
         <button style={{height: "1.6rem"}} onClick={() => setIsStatsModalOpen(true)}>
@@ -44,6 +32,9 @@ const Header = ({
         </button>
         <button style={{height: "1.6rem"}} onClick={() => setIsSettingsModalOpen(true)}>
           <BsGear size="1.6rem" color="var(--color-icon)" />
+        </button>
+        <button className={styles.rlogo1} onClick={() => swapclue(true)}>
+          {sclue==="M" ? "D" : "M"}
         </button>
       </div>
     </header>
