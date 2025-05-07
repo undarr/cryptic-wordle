@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import styles from './Cell.module.scss';
+import { MAX_CHALLENGES } from 'constants/settings';
 
 const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hintcell, guesslength, onclick}) => {
   var width;
@@ -17,7 +18,7 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hint
     }
     else {
       width = Math.min(55,Math.floor((window.innerWidth-100)/wordlength));
-      height = Math.min(55,Math.floor((window.innerHeight*0.35)/guesslength));
+      height = Math.min(55,Math.floor((window.innerHeight*0.35)/Math.min(guesslength,MAX_CHALLENGES-1)));
       fs = `${Math.round(height*26/55)/10}rem`;
     }
   } else {

@@ -46,7 +46,7 @@ body {
   font-family: 'Baloo 2', sans-serif;
   background: var(--color-background);
   color: #fff;
-  min-height: 100vh;
+  height: 100vh;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -60,4 +60,14 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+@media screen and (max-width: 480px) {
+  body {
+    height: 97vh;
+  }
+
+  .container {
+    height: 97vh;
+  }
 }

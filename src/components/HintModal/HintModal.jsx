@@ -50,7 +50,7 @@ const HintModal = ({ isOpen, onClose, sclue, clue, sh1, sh2, sh3, dh1, dh2, dh3,
             </span>
         );
     })}</h2>
-      <h3 class={styles.newh3}>Click a cell below to reveal a letter.</h3>
+      <h3 class={styles.newh3}>Click a cell below to reveal a letter. (In prog)</h3>
       <div className={styles.row}>
         <Cell hintcell="true" value="W" status="correct" isCompleted/>
         <Cell hintcell="true" value="E" />
