@@ -547,7 +547,7 @@ MCryptic Wordle #${solutionIndex}
 - ${mclue}
 ${
   ismGameLost || ismGameWon
-    ? `${isdGameLost ? '💀' : '✨'} ${
+    ? `${ismGameLost ? '💀' : '✨'} ${
         ismGameLost ? 'X' : mguesses.length
       }/${MAX_CHALLENGES} guesses with ${mhintused}/${
         3 + mrevealed.length
