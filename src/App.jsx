@@ -336,9 +336,9 @@ function App() {
             mrevealed.length -
             mrevealed.split('').filter(c => c === ' ').length
         );
-        showhint1();
-        showhint2();
-        showhint3();
+        showhint1('✨ ');
+        showhint2('✨ ');
+        showhint3('✨ ');
       } else {
         setIsdGameWon(true);
         setdhintused(
@@ -346,7 +346,7 @@ function App() {
             drevealed.length -
             drevealed.split('').filter(c => c === ' ').length
         );
-        showhint1();
+        showhint1('✨ ');
       }
       setTimeout(() => showAlert('Well done', 'success'), ALERT_DELAY);
       setTimeout(() => setIsStatsModalOpen(true), ALERT_DELAY + 1000);
@@ -360,9 +360,9 @@ function App() {
             mrevealed.length -
             mrevealed.split('').filter(c => c === ' ').length
         );
-        showhint1();
-        showhint2();
-        showhint3();
+        showhint1('💀 ');
+        showhint2('💀 ');
+        showhint3('💀 ');
       } else {
         setIsdGameLost(true);
         setdhintused(
@@ -370,7 +370,7 @@ function App() {
             drevealed.length -
             drevealed.split('').filter(c => c === ' ').length
         );
-        showhint1();
+        showhint1('💀 ');
       }
       setTimeout(
         () => showAlert(`The word is ${solution}`, 'error', true),
@@ -628,18 +628,18 @@ ${generateEmojiGrid(dguesses, dsolution)}`
     setHardMode(!isHardMode);
   };
 
-  const showhint1 = () => {
+  const showhint1 = (x = '🔓 ') => {
     if (sclue === 'M') {
       if (mdisplayhint1 === '') {
         setmdisplayhint1(
-          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          x +
             mhintt1.charAt(0).toUpperCase() +
             mhintt1.slice(1) +
             ' : ' +
             mhint1
         );
         setdisplayhint1(
-          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          x +
             mhintt1.charAt(0).toUpperCase() +
             mhintt1.slice(1) +
             ' : ' +
@@ -649,18 +649,8 @@ ${generateEmojiGrid(dguesses, dsolution)}`
     }
     if (sclue === 'D') {
       if (ddisplayhint === '') {
-        setddisplayhint(
-          (isdGameWon ? '✨ ' : isdGameLost ? '💀 ' : '🔓 ') +
-            'Definition : "' +
-            dhint +
-            '"'
-        );
-        setdisplayhint1(
-          (isdGameWon ? '✨ ' : isdGameLost ? '💀 ' : '🔓 ') +
-            'Definition : "' +
-            dhint +
-            '"'
-        );
+        setddisplayhint(x + 'Definition : "' + dhint + '"');
+        setdisplayhint1(x + 'Definition : "' + dhint + '"');
       }
     }
   };
@@ -669,14 +659,14 @@ ${generateEmojiGrid(dguesses, dsolution)}`
     if (sclue === 'M') {
       if (mdisplayhint2 === '') {
         setmdisplayhint2(
-          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          x +
             mhintt2.charAt(0).toUpperCase() +
             mhintt2.slice(1) +
             ' : ' +
             mhint2
         );
         setdisplayhint2(
-          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          x +
             mhintt2.charAt(0).toUpperCase() +
             mhintt2.slice(1) +
             ' : ' +
@@ -693,14 +683,14 @@ ${generateEmojiGrid(dguesses, dsolution)}`
     if (sclue === 'M') {
       if (mdisplayhint3 === '') {
         setmdisplayhint3(
-          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          x +
             mhintt3.charAt(0).toUpperCase() +
             mhintt3.slice(1) +
             ' : ' +
             mhint3
         );
         setdisplayhint3(
-          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          x +
             mhintt3.charAt(0).toUpperCase() +
             mhintt3.slice(1) +
             ' : ' +
