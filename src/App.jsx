@@ -357,15 +357,19 @@ function App() {
           (mdisplayhint1 === '' ? 0 : 1) +
             (mdisplayhint2 === '' ? 0 : 1) +
             (mdisplayhint3 === '' ? 0 : 1) +
-            drevealed.length -
-            drevealed.split('').filter(c => c === ' ').length
+            mrevealed.length -
+            mrevealed.split('').filter(c => c === ' ').length
         );
         showhint1();
         showhint2();
         showhint3();
       } else {
         setIsdGameLost(true);
-        setdhintused(ddisplayhint === '' ? 0 : 1);
+        setdhintused(
+          (ddisplayhint === '' ? 0 : 1) +
+            drevealed.length -
+            drevealed.split('').filter(c => c === ' ').length
+        );
         showhint1();
       }
       setTimeout(
