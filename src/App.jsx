@@ -271,6 +271,7 @@ function App() {
     false
   );
   const [hardMode, setHardMode] = useLocalStorage('hard-mode', false);
+  /*
   const [stats, setStats] = useLocalStorage('gameStats', {
     winDistribution: Array.from(new Array(MAX_CHALLENGES), () => 0),
     gamesFailed: 0,
@@ -279,6 +280,7 @@ function App() {
     totalGames: 0,
     successRate: 0,
   });
+  */
   const [mcurrentGuess, setmCurrentGuess] = useState('');
   const [dcurrentGuess, setdCurrentGuess] = useState('');
   const [mguesses, setmGuesses] = useState([]);
@@ -519,6 +521,7 @@ function App() {
     return false;
   };
 
+  /*
   const addStatsForCompletedGame = (gameStats, count) => {
     // Count is number of incorrect guesses before end.
     const stats = { ...gameStats };
@@ -550,14 +553,17 @@ function App() {
       (100 * (totalGames - gamesFailed)) / Math.max(totalGames, 1)
     );
   };
+  */
 
   const shareStatus = () => {
     const textToShare = `Cryptic Wordle
 https://ucrypticwordle.netlify.app/
 
-MCryptic Wordle #${solutionIndex} ${mdisplayhint1 === '' ? '🔒' : '🔓'}${
-      mdisplayhint2 === '' ? '🔒' : '🔓'
-    }${mdisplayhint3 === '' ? '🔒' : '🔓'}
+MCryptic Wordle #${solutionIndex} ${
+      mdisplayhint1[0] === '🔓'[0] ? '🔓' : '🔒'
+    }${mdisplayhint2[0] === '🔓'[0] ? '🔓' : '🔒'}${
+      mdisplayhint3[0] === '🔓'[0] ? '🔓' : '🔒'
+    }
 - ${mclue}
 ${
   ismGameLost || ismGameWon
@@ -566,11 +572,13 @@ ${
       }/${MAX_CHALLENGES} guesses with ${mhintused}/${
         3 + mrevealed.length
       } hints!
-${generateEmojiGrid(mguesses, msolution)}`
+${generateEmojiGrid(mguesses, msolution, mrevealed)}`
     : '❓ Unattempted/Unfinished'
 }
 
-DCryptic Wordle #${solutionIndex - 75} ${ddisplayhint === '' ? '🔒' : '🔓'}
+DCryptic Wordle #${solutionIndex - 75} ${
+      ddisplayhint[0] === '🔓'[0] ? '🔓' : '🔒'
+    }
 - ${dclue}
 ${
   isdGameLost || isdGameWon
@@ -579,16 +587,22 @@ ${
       }/${MAX_CHALLENGES} guesses with ${dhintused}/${
         1 + drevealed.length
       } hints!
-${generateEmojiGrid(dguesses, dsolution)}`
+${generateEmojiGrid(dguesses, dsolution, drevealed)}`
     : '❓ Unattempted/Unfinished'
 }`;
     navigator.clipboard.writeText(textToShare);
+    console.log(
+      mdisplayhint1,
+      mdisplayhint1[0],
+      mdisplayhint2,
+      mdisplayhint2[0]
+    );
   };
 
-  const generateEmojiGrid = (guesses, sol) => {
+  const generateEmojiGrid = (guesses, sol, r) => {
     return guesses
       .map(guess => {
-        const status = getGuessStatuses(guess, sol);
+        const status = getGuessStatuses(guess, sol, r);
         const splitGuess = guess.split('');
 
         return splitGuess
@@ -863,11 +877,13 @@ DCryptic Wordle #${solutionIndex - 75}
       }
     }
 
+    /*
     if (tosolu(currentGuess) === solution.toUpperCase()) {
       setStats(addStatsForCompletedGame(stats, guesses.length));
     } else if (guesses.length + 1 === MAX_CHALLENGES) {
       setStats(addStatsForCompletedGame(stats, guesses.length + 1));
     }
+    */
 
     setenterdisable(true);
     setTimeout(() => {
@@ -994,7 +1010,7 @@ DCryptic Wordle #${solutionIndex - 75}
       <StatsModal
         isOpen={isStatsModalOpen}
         onClose={() => setIsStatsModalOpen(false)}
-        gameStats={stats}
+        //gameStats={stats}
         numberOfGuessesMade={mguesses.length}
         ismGameWon={ismGameWon}
         ismGameLost={ismGameLost}
