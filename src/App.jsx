@@ -341,7 +341,11 @@ function App() {
         showhint3();
       } else {
         setIsdGameWon(true);
-        setdhintused(ddisplayhint === '' ? 0 : 1);
+        setdhintused(
+          (ddisplayhint === '' ? 0 : 1) +
+            drevealed.length -
+            drevealed.split('').filter(c => c === ' ').length
+        );
         showhint1();
       }
       setTimeout(() => showAlert('Well done', 'success'), ALERT_DELAY);
