@@ -52,7 +52,6 @@ function App() {
   const [displayhint1, setdisplayhint1] = useState('');
   const [displayhint2, setdisplayhint2] = useState('');
   const [displayhint3, setdisplayhint3] = useState('');
-  const [solution, setsolution] = useState(WORDS[0]);
 
   const [mclue, setmclue] = useState('Loading...');
   const [mhint1, setmhint1] = useState('Loading...');
@@ -83,25 +82,21 @@ function App() {
   function swapclue(x = '') {
     if (x === 'D') {
       setsclue('D');
-      setsolution(dsolution);
       setdisplayhint1(ddisplayhint);
       setdisplayhint2('');
       setdisplayhint3('');
     } else if (x === 'M') {
       setsclue('M');
-      setsolution(msolution);
       setdisplayhint1(mdisplayhint1);
       setdisplayhint2(mdisplayhint2);
       setdisplayhint3(mdisplayhint3);
     } else if (sclue === 'M') {
       setsclue('D');
-      setsolution(dsolution);
       setdisplayhint1(ddisplayhint);
       setdisplayhint2('');
       setdisplayhint3('');
     } else if (sclue === 'D') {
       setsclue('M');
-      setsolution(msolution);
       setdisplayhint1(mdisplayhint1);
       setdisplayhint2(mdisplayhint2);
       setdisplayhint3(mdisplayhint3);
@@ -145,8 +140,6 @@ function App() {
               const ddata =
                 response.data.result.capturedTexts.clue.split(' ()big() ')[1];
               const newsol = data.split(' ()minc() ')[1].replace(/ /g, '-');
-              setsolution(newsol);
-
               setmclue(data.split(' ()minc() ')[0]);
               setmsolution(newsol);
               setmhint1(data.split(' ()minc() ')[2]);
@@ -214,8 +207,6 @@ function App() {
                     const newsol = data
                       .split(' ()minc() ')[1]
                       .replace(/ /g, '-');
-                    setsolution(newsol);
-
                     setmclue(data.split(' ()minc() ')[0]);
                     setmsolution(newsol);
                     setmhint1(data.split(' ()minc() ')[2]);
@@ -322,12 +313,8 @@ function App() {
 
   // Check game winning or losing
   useEffect(() => {
-    var guesses;
-    if (sclue === 'M') {
-      guesses = mguesses;
-    } else {
-      guesses = dguesses;
-    }
+    var guesses = sclue === 'M' ? mguesses : dguesses;
+    var solution = sclue === 'M' ? msolution : dsolution;
     if (guesses.includes(solution.toUpperCase())) {
       if (sclue === 'M') {
         setIsmGameWon(true);
@@ -460,6 +447,7 @@ function App() {
 
   const getStatuses = guesses => {
     const charObj = {};
+    var solution = sclue === 'M' ? msolution : dsolution;
     const splitSolution = solution.toUpperCase().split('');
     const revealed = sclue === 'M' ? mrevealed : drevealed;
 
@@ -784,20 +772,11 @@ DCryptic Wordle #${solutionIndex - 75}
   };
 
   const revealletter = j => {
-    var oldhintword;
-    if (sclue === 'M') {
-      oldhintword = mhintword;
-    } else {
-      oldhintword = dhintword;
-    }
-    var revealed;
-    if (sclue === 'M') {
-      revealed = mrevealed;
-    } else {
-      revealed = drevealed;
-    }
+    var oldhintword = sclue === 'M' ? mhintword : dhintword;
+    var revealed = sclue === 'M' ? mrevealed : drevealed;
     var newhintword = '';
     var newrevealed = '';
+    var solution = sclue === 'M' ? msolution : dsolution;
     for (let i = 0; i < solution.length; i++) {
       if (j === i) {
         newhintword += solution[i].toUpperCase();
@@ -841,18 +820,9 @@ DCryptic Wordle #${solutionIndex - 75}
   const handleEnter = () => {
     if (sclue === 'M' && (ismGameWon || ismGameLost || enterdisable)) return;
     if (sclue === 'D' && (isdGameWon || isdGameLost || enterdisable)) return;
-    var currentGuess;
-    if (sclue === 'M') {
-      currentGuess = mcurrentGuess;
-    } else {
-      currentGuess = dcurrentGuess;
-    }
-    var guesses;
-    if (sclue === 'M') {
-      guesses = mguesses;
-    } else {
-      guesses = dguesses;
-    }
+    var currentGuess = sclue === 'M' ? mcurrentGuess : dcurrentGuess;
+    var guesses = sclue === 'M' ? mguesses : dguesses;
+    var solution = sclue === 'M' ? msolution : dsolution;
 
     if (currentGuess.length < (sclue === 'M' ? manswerlength : danswerlength)) {
       setIsJiggling(true);
