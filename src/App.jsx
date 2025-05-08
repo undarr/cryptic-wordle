@@ -648,7 +648,7 @@ ${generateEmojiGrid(dguesses, dsolution)}`
       }
     }
     if (sclue === 'D') {
-      if (ddisplayhint1 === '') {
+      if (ddisplayhint === '') {
         setddisplayhint(
           (isdGameWon ? '✨ ' : isdGameLost ? '💀 ' : '🔓 ') +
             'Definition : "' +
