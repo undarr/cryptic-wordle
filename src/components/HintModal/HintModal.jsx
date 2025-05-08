@@ -23,10 +23,9 @@ const splitline = (inputText,n=30) => {
   return (lines.join(' \n '));
 };
 
-const HintModal = ({ isOpen, onClose, sclue, clue, sh1, sh2, sh3, dh1, dh2, dh3, ht1, ht2, ht3 ,hintword, sol, getGuessStatuses}) => {
+const HintModal = ({ isOpen, onClose, sclue, clue, sh1, sh2, sh3, dh1, dh2, dh3, ht1, ht2, ht3 ,hintword, sol, getGuessStatuses, onclick}) => {
   const cells = hintword.split('');
   const statuses = getGuessStatuses(hintword,sol);
-  console.log(hintword,sol);
   return (
     <Modal title={'Hints'} isOpen={isOpen} onClose={onClose} nogap={true}>
       <h2 style={{ textAlign: 'center' }}>{splitline(clue).split(' ').map((word, index) => {
@@ -49,17 +48,18 @@ const HintModal = ({ isOpen, onClose, sclue, clue, sh1, sh2, sh3, dh1, dh2, dh3,
             </span>
         );
     })}</h2>
-      <h3 class={styles.newh3}>Click a cell below to reveal a letter. (In prog)</h3>
-      <div className={styles.row}>
+      <h3 class={styles.newh3}>Click a cell below to reveal a letter.</h3>
+      <div className={styles.row} style={{"grid-template-columns": `repeat(${sol.length}, 1fr)`}}>
         {cells.map((letter, index) => (
           <Cell
             hintcell="true"
-            key={index}
-            position={index}
             value={letter}
             status={statuses[index]}
             wordlength={sol.length}
             guesslength={1}
+            actionpos={index}
+            onclick={onclick}
+            isCompleted
           />
       ))}
       </div>

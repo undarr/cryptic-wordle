@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import styles from './Cell.module.scss';
 import { MAX_CHALLENGES } from 'constants/settings';
 
-const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hintcell, guesslength, onclick}) => {
+const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hintcell, guesslength, actionpos, onclick}) => {
   var width;
   var height;
   var fs;
@@ -29,7 +29,7 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hint
       fs = "2.6rem";
     }
     else if (hintcell==="true") {
-      width = Math.min(60,Math.floor((window.innerWidth-100)/wordlength));
+      width = Math.min(60,Math.floor((360)/wordlength));
       height = 60;
       fs = "2.6rem";
     }
@@ -44,6 +44,7 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hint
     [styles.cell]: true,
     [styles.absent]: status === 'absent',
     [styles.present]: status === 'present',
+    [styles.revealed]: status === 'revealed',
     [styles.correct]: status === 'correct',
     [styles.fill]: value && value!==" ",
     [styles.reveal]: isCompleted,
@@ -52,7 +53,9 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hint
   const animationDelay = `${position * 0.35}s`;
 
   return (
-    <div className={classes} style={{animationDelay, "width": width , "height": height, "font-size": fs}} onclick={onclick}>
+    <div className={classes} style={{animationDelay, "width": width , "height": height, "font-size": fs,
+    "cursor": (hintcell === "true" && status === 'absent') ? "pointer" : "default"}}
+    onClick={(hintcell === "true" && status === 'absent') ? () => {onclick(actionpos);} : () => {}}>
       <span className={styles.letter} style={{animationDelay}}>
         {value}
       </span>

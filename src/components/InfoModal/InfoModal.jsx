@@ -6,9 +6,10 @@ const InfoModal = ({ isOpen, onClose }) => {
   return (
     <Modal title={'How to play'} isOpen={isOpen} onClose={onClose}>
       <h3>
-        Guess the CRYPTIC WORDLE based on the clue in 5 tries. Each guess must be a valid word. Hit the enter button to submit. After each guess, the color of the
+        Guess the CRYPTIC WORDLE based on the clue in 10 tries. Each guess must be a valid word. Hit the enter button to submit. After each guess, the color of the
         tiles will change to show how close your guess was to the word.
       </h3>
+      <div style={{"max-width":"368px", "margin":"0 auto"}}>
       <div className={styles.row}>
         <Cell infocell="true" value="W" status="correct" isCompleted/>
         <Cell infocell="true" value="E" />
@@ -33,6 +34,7 @@ const InfoModal = ({ isOpen, onClose }) => {
         <Cell infocell="true" value="E" />
       </div>
       <h3>The letter U is not in the word in any spot.</h3>
+      </div>
     </Modal>
   );
 };

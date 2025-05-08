@@ -43,6 +43,11 @@
   color: #fff;
 }
 
+.revealed {
+  background-color: var(--color-revealed);
+  color: #fff;
+}
+
 .action {
   background-color: var(--color-key-secondary);
   color: var(--color-background);

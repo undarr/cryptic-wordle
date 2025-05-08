@@ -65,6 +65,7 @@ function App() {
   const [mdisplayhint2, setmdisplayhint2] = useState('');
   const [mdisplayhint3, setmdisplayhint3] = useState('');
   const [mhintword, setmhintword] = useState(WORDS[0]);
+  const [mrevealed, setmrevealed] = useState(WORDS[0]);
   const [mvideo, setmvideo] = useState('www.example.com');
   const [msolution, setmsolution] = useState(WORDS[0]);
   const [manswerlength, setmanswerlength] = useState(0);
@@ -73,6 +74,7 @@ function App() {
   const [dhint, setdhint] = useState('Loading...');
   const [ddisplayhint, setddisplayhint] = useState('');
   const [dhintword, setdhintword] = useState(WORDS[0]);
+  const [drevealed, setdrevealed] = useState(WORDS[0]);
   const [dvideo, setdvideo] = useState('Loading...');
   const [dsolution, setdsolution] = useState(WORDS[0]);
   const [danswerlength, setdanswerlength] = useState(0);
@@ -158,6 +160,10 @@ function App() {
                 startguess(newsol) +
                   ' '.repeat(newsol.length - startguess(newsol).length)
               );
+              setmrevealed(
+                startguess(newsol) +
+                  ' '.repeat(newsol.length - startguess(newsol).length)
+              );
 
               const newdsol = ddata.split(' ()dc() ')[0];
               setdclue(ddata.split(' ()dc() ')[1]);
@@ -166,6 +172,10 @@ function App() {
               setdvideo(ddata.split(' ()dc() ')[2]);
               setdanswerlength(ddata.split(' ()dc() ')[0].length);
               setdhintword(
+                startguess(newdsol) +
+                  ' '.repeat(newdsol.length - startguess(newdsol).length)
+              );
+              setdrevealed(
                 startguess(newdsol) +
                   ' '.repeat(newdsol.length - startguess(newdsol).length)
               );
@@ -214,12 +224,29 @@ function App() {
                     setmhintt3(data.split(' ()minc() ')[7]);
                     setmvideo(data.split(' ()minc() ')[8]);
                     setmanswerlength(newsol.length);
+                    setmhintword(
+                      startguess(newsol) +
+                        ' '.repeat(newsol.length - startguess(newsol).length)
+                    );
+                    setmrevealed(
+                      startguess(newsol) +
+                        ' '.repeat(newsol.length - startguess(newsol).length)
+                    );
 
+                    const newdsol = ddata.split(' ()dc() ')[0];
                     setdclue(ddata.split(' ()dc() ')[1]);
-                    setdsolution(ddata.split(' ()dc() ')[0]);
+                    setdsolution(newdsol);
                     setdhint(ddata.split(' ()dc() ')[3]);
                     setdvideo(ddata.split(' ()dc() ')[2]);
                     setdanswerlength(ddata.split(' ()dc() ')[0].length);
+                    setdhintword(
+                      startguess(newdsol) +
+                        ' '.repeat(newdsol.length - startguess(newdsol).length)
+                    );
+                    setdrevealed(
+                      startguess(newdsol) +
+                        ' '.repeat(newdsol.length - startguess(newdsol).length)
+                    );
                   })
                   .catch(error => {
                     console.error('Error making the request:', error);
@@ -228,7 +255,7 @@ function App() {
               .catch(error => {
                 console.error('Error making the request:', error);
               });
-          }, 45000);
+          }, 60000);
         }
       })
       .catch(error => {
@@ -303,7 +330,9 @@ function App() {
         setmhintused(
           (mdisplayhint1 === '' ? 0 : 1) +
             (mdisplayhint2 === '' ? 0 : 1) +
-            (mdisplayhint3 === '' ? 0 : 1)
+            (mdisplayhint3 === '' ? 0 : 1) +
+            mrevealed.length -
+            mrevealed.split('').filter(c => c === ' ').length
         );
         showhint1();
         showhint2();
@@ -321,7 +350,9 @@ function App() {
         setmhintused(
           (mdisplayhint1 === '' ? 0 : 1) +
             (mdisplayhint2 === '' ? 0 : 1) +
-            (mdisplayhint3 === '' ? 0 : 1)
+            (mdisplayhint3 === '' ? 0 : 1) +
+            drevealed.length -
+            drevealed.split('').filter(c => c === ' ').length
         );
         showhint1();
         showhint2();
@@ -368,17 +399,24 @@ function App() {
     );
   };
 
-  const getGuessStatuses = (guess, sol) => {
+  const getGuessStatuses = (
+    guess,
+    sol = sclue === 'M' ? msolution : dsolution,
+    revealed = sclue === 'M' ? mrevealed : drevealed
+  ) => {
     const splitGuess = guess.toLowerCase().split('');
     const splitSolution = sol.split('');
-
     const statuses = [];
     const solutionCharsTaken = splitSolution.map(_ => false);
 
     // handle all correct cases first
     splitGuess.forEach((letter, i) => {
       if (letter === splitSolution[i]) {
-        statuses[i] = 'correct';
+        if (letter.toUpperCase() === revealed[i].toUpperCase()) {
+          statuses[i] = 'revealed';
+        } else {
+          statuses[i] = 'correct';
+        }
         solutionCharsTaken[i] = true;
         return;
       }
@@ -414,13 +452,18 @@ function App() {
   const getStatuses = guesses => {
     const charObj = {};
     const splitSolution = solution.toUpperCase().split('');
+    const revealed = sclue === 'M' ? mrevealed : drevealed;
 
     guesses.forEach(word => {
       word.split('').forEach((letter, i) => {
         if (!splitSolution.includes(letter))
           return (charObj[letter] = 'absent');
-        if (letter === splitSolution[i]) return (charObj[letter] = 'correct');
-        if (charObj[letter] !== 'correct') return (charObj[letter] = 'present');
+        if (letter === splitSolution[i] && letter === revealed[i])
+          return (charObj[letter] = 'revealed');
+        if (charObj[letter] !== 'revealed' && letter === splitSolution[i])
+          return (charObj[letter] = 'correct');
+        if (charObj[letter] !== 'revealed' && charObj[letter] !== 'correct')
+          return (charObj[letter] = 'present');
       });
     });
 
@@ -502,9 +545,11 @@ MCryptic Wordle #${solutionIndex}
 - ${mclue}
 ${
   ismGameLost || ismGameWon
-    ? `✨ ${
+    ? `${isdGameLost ? '💀' : '✨'} ${
         ismGameLost ? 'X' : mguesses.length
-      }/${MAX_CHALLENGES} guesses with ${mhintused}/3 hints!
+      }/${MAX_CHALLENGES} guesses with ${mhintused}/${
+        3 + mrevealed.length
+      } hints!
 ${generateEmojiGrid(mguesses, msolution)}`
     : '❓ Unattempted/Unfinished'
 }
@@ -513,9 +558,11 @@ DCryptic Wordle #${solutionIndex - 75}
 - ${dclue}
 ${
   isdGameLost || isdGameWon
-    ? `✨ ${
+    ? `${isdGameLost ? '💀' : '✨'} ${
         isdGameLost ? 'X' : dguesses.length
-      }/${MAX_CHALLENGES} guesses with ${dhintused}/1 hints!
+      }/${MAX_CHALLENGES} guesses with ${dhintused}/${
+        1 + drevealed.length
+      } hints!
 ${generateEmojiGrid(dguesses, dsolution)}`
     : '❓ Unattempted/Unfinished'
 }`;
@@ -534,6 +581,8 @@ ${generateEmojiGrid(dguesses, dsolution)}`
               return '➖';
             }
             switch (status[i]) {
+              case 'revealed':
+                return '🟪';
               case 'correct':
                 return '🟩';
               case 'present':
@@ -612,17 +661,27 @@ ${generateEmojiGrid(dguesses, dsolution)}`
           ? mhintused
           : (mdisplayhint1 === '' ? 0 : 1) +
             (mdisplayhint2 === '' ? 0 : 1) +
-            (mdisplayhint3 === '' ? 0 : 1);
+            (mdisplayhint3 === '' ? 0 : 1) +
+            mrevealed.length -
+            mrevealed.split('').filter(c => c === ' ').length;
       return `${ismGameLost ? '💀' : ismGameWon ? '✨' : '🤔 At'} ${
         ismGameLost ? 'X' : mguesses.length
-      }/${MAX_CHALLENGES} guesses with ${hintused}/3 hints!`;
+      }/${MAX_CHALLENGES} guesses with ${hintused}/${
+        3 + mrevealed.length
+      } hints!`;
     }
     if (l === 'D') {
       const hintused =
-        isdGameLost || isdGameWon ? dhintused : ddisplayhint === '' ? 0 : 1;
+        isdGameLost || isdGameWon
+          ? dhintused
+          : (ddisplayhint === '' ? 0 : 1) +
+            drevealed.length -
+            drevealed.split('').filter(c => c === ' ').length;
       return `${isdGameLost ? '💀' : isdGameWon ? '✨' : '🤔 At'} ${
         isdGameLost ? 'X' : dguesses.length
-      }/${MAX_CHALLENGES} guesses with ${hintused}/1 hints!`;
+      }/${MAX_CHALLENGES} guesses with ${hintused}/${
+        1 + drevealed.length
+      } hints!`;
     }
   };
 
@@ -659,6 +718,42 @@ DCryptic Wordle #${solutionIndex - 75}
       } else {
         setdCurrentGuess(currentGuess + letter);
       }
+    }
+  };
+
+  const revealletter = j => {
+    var oldhintword;
+    if (sclue === 'M') {
+      oldhintword = mhintword;
+    } else {
+      oldhintword = dhintword;
+    }
+    var revealed;
+    if (sclue === 'M') {
+      revealed = mrevealed;
+    } else {
+      revealed = drevealed;
+    }
+    var newhintword = '';
+    var newrevealed = '';
+    for (let i = 0; i < solution.length; i++) {
+      if (j === i) {
+        newhintword += solution[i].toUpperCase();
+        newrevealed += solution[i].toUpperCase();
+      } else {
+        newhintword += oldhintword[i];
+        newrevealed += revealed[i];
+      }
+    }
+    if (sclue === 'M') {
+      setmhintword(newhintword);
+    } else {
+      setdhintword(newhintword);
+    }
+    if (sclue === 'M') {
+      setmrevealed(newrevealed);
+    } else {
+      setdrevealed(newrevealed);
     }
   };
 
@@ -730,6 +825,26 @@ DCryptic Wordle #${solutionIndex - 75}
     setTimeout(() => {
       setenterdisable(false);
     }, 500);
+
+    var oldhintword;
+    if (sclue === 'M') {
+      oldhintword = mhintword;
+    } else {
+      oldhintword = dhintword;
+    }
+    var newhintword = '';
+    for (let i = 0; i < solution.length; i++) {
+      if (currentGuess[i] === solution[i].toUpperCase()) {
+        newhintword += solution[i].toUpperCase();
+      } else {
+        newhintword += oldhintword[i];
+      }
+    }
+    if (sclue === 'M') {
+      setmhintword(newhintword);
+    } else {
+      setdhintword(newhintword);
+    }
 
     if (sclue === 'M') {
       setmGuesses([...guesses, tosolu(currentGuess)]);
@@ -807,6 +922,7 @@ DCryptic Wordle #${solutionIndex - 75}
         hintword={sclue === 'M' ? mhintword : dhintword}
         sol={sclue === 'M' ? msolution : dsolution}
         getGuessStatuses={getGuessStatuses}
+        onclick={revealletter}
       />
       <InfoModal
         isOpen={isInfoModalOpen}

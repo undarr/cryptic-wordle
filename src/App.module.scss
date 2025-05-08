@@ -11,6 +11,7 @@
   --color-absent: #405069;
   --color-present: #e0c02b;
   --color-correct: #31ad23;
+  --color-revealed: #ff007f;
   --color-alert-success: #3fbf62;
   --color-alert-error: #ea4e2c;
   --color-toggle: #3fbf62;
@@ -38,6 +39,7 @@
   [data-mode='high-contrast'] {
     --color-present: #06b6d4;
     --color-correct: #f97316;
+    --color-revealed: #a020f0;
   }
 }
 

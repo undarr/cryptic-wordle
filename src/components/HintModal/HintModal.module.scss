@@ -11,10 +11,10 @@ h3 {
 }
 
 .row {
+  width: fit-content;
+  margin: 0 auto 1rem;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
   grid-gap: 10px;
-  margin-bottom: 1rem;
 }
 
 .showhintbut {

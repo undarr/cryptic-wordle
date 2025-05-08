@@ -70,6 +70,7 @@ const Key = ({ value, status, onClick }) => {
     [styles.absent]: status === 'absent',
     [styles.present]: status === 'present',
     [styles.correct]: status === 'correct',
+    [styles.revealed]: status === 'revealed',
     [styles.action]: status === 'action',
   });
 
