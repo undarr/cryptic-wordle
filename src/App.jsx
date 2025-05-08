@@ -655,7 +655,7 @@ ${generateEmojiGrid(dguesses, dsolution)}`
     }
   };
 
-  const showhint2 = () => {
+  const showhint2 = (x = '🔓 ') => {
     if (sclue === 'M') {
       if (mdisplayhint2 === '') {
         setmdisplayhint2(
@@ -679,7 +679,7 @@ ${generateEmojiGrid(dguesses, dsolution)}`
     }
   };
 
-  const showhint3 = () => {
+  const showhint3 = (x = '🔓 ') => {
     if (sclue === 'M') {
       if (mdisplayhint3 === '') {
         setmdisplayhint3(
