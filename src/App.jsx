@@ -884,7 +884,7 @@ DCryptic Wordle #${solutionIndex - 75}
         sol={msolution}
         isGameWon={ismGameWon}
         hide={sclue !== 'M'}
-        clueby={sclue === 'M' ? 'Clue by ' + mclueby : ''}
+        clueby={'Clue by ' + mclueby}
       />
       <Grid
         currentGuess={tosolu(dcurrentGuess)}
@@ -900,6 +900,7 @@ DCryptic Wordle #${solutionIndex - 75}
         sol={dsolution}
         isGameWon={isdGameWon}
         hide={sclue !== 'D'}
+        clueby={''}
       />
       <Keyboard
         onEnter={handleEnter}
