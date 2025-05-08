@@ -630,53 +630,59 @@ ${generateEmojiGrid(dguesses, dsolution)}`
 
   const showhint1 = () => {
     if (sclue === 'M') {
-      setmdisplayhint1(
-        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
-          mhintt1.charAt(0).toUpperCase() +
-          mhintt1.slice(1) +
-          ' : ' +
-          mhint1
-      );
-      setdisplayhint1(
-        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
-          mhintt1.charAt(0).toUpperCase() +
-          mhintt1.slice(1) +
-          ' : ' +
-          mhint1
-      );
+      if (mdisplayhint1 === '') {
+        setmdisplayhint1(
+          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+            mhintt1.charAt(0).toUpperCase() +
+            mhintt1.slice(1) +
+            ' : ' +
+            mhint1
+        );
+        setdisplayhint1(
+          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+            mhintt1.charAt(0).toUpperCase() +
+            mhintt1.slice(1) +
+            ' : ' +
+            mhint1
+        );
+      }
     }
     if (sclue === 'D') {
-      setddisplayhint(
-        (isdGameWon ? '✨ ' : isdGameLost ? '💀 ' : '🔓 ') +
-          'Definition : "' +
-          dhint +
-          '"'
-      );
-      setdisplayhint1(
-        (isdGameWon ? '✨ ' : isdGameLost ? '💀 ' : '🔓 ') +
-          'Definition : "' +
-          dhint +
-          '"'
-      );
+      if (ddisplayhint1 === '') {
+        setddisplayhint(
+          (isdGameWon ? '✨ ' : isdGameLost ? '💀 ' : '🔓 ') +
+            'Definition : "' +
+            dhint +
+            '"'
+        );
+        setdisplayhint1(
+          (isdGameWon ? '✨ ' : isdGameLost ? '💀 ' : '🔓 ') +
+            'Definition : "' +
+            dhint +
+            '"'
+        );
+      }
     }
   };
 
   const showhint2 = () => {
     if (sclue === 'M') {
-      setmdisplayhint2(
-        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
-          mhintt2.charAt(0).toUpperCase() +
-          mhintt2.slice(1) +
-          ' : ' +
-          mhint2
-      );
-      setdisplayhint2(
-        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
-          mhintt2.charAt(0).toUpperCase() +
-          mhintt2.slice(1) +
-          ' : ' +
-          mhint2
-      );
+      if (mdisplayhint2 === '') {
+        setmdisplayhint2(
+          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+            mhintt2.charAt(0).toUpperCase() +
+            mhintt2.slice(1) +
+            ' : ' +
+            mhint2
+        );
+        setdisplayhint2(
+          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+            mhintt2.charAt(0).toUpperCase() +
+            mhintt2.slice(1) +
+            ' : ' +
+            mhint2
+        );
+      }
     }
     if (sclue === 'D') {
       setdisplayhint2('');
@@ -685,20 +691,22 @@ ${generateEmojiGrid(dguesses, dsolution)}`
 
   const showhint3 = () => {
     if (sclue === 'M') {
-      setmdisplayhint3(
-        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
-          mhintt3.charAt(0).toUpperCase() +
-          mhintt3.slice(1) +
-          ' : ' +
-          mhint3
-      );
-      setdisplayhint3(
-        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
-          mhintt3.charAt(0).toUpperCase() +
-          mhintt3.slice(1) +
-          ' : ' +
-          mhint3
-      );
+      if (mdisplayhint3 === '') {
+        setmdisplayhint3(
+          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+            mhintt3.charAt(0).toUpperCase() +
+            mhintt3.slice(1) +
+            ' : ' +
+            mhint3
+        );
+        setdisplayhint3(
+          (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+            mhintt3.charAt(0).toUpperCase() +
+            mhintt3.slice(1) +
+            ' : ' +
+            mhint3
+        );
+      }
     }
     if (sclue === 'D') {
       setdisplayhint3('');
