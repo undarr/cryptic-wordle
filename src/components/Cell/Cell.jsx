@@ -13,6 +13,7 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hint
       fs = "2.4rem";
     }
     else if (hintcell==="true") {
+      width = Math.min(55,Math.floor((window.innerWidth-100)/wordlength));
       height = 55;
       fs = "2.4rem";
     }
@@ -28,6 +29,7 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hint
       fs = "2.6rem";
     }
     else if (hintcell==="true") {
+      width = Math.min(60,Math.floor((window.innerWidth-100)/wordlength));
       height = 60;
       fs = "2.6rem";
     }

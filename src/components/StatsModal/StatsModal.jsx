@@ -60,7 +60,7 @@ const StatsModal = ({
       {(ismGameWon || ismGameLost || isdGameWon || isdGameLost) && (<>
         <div className={styles.bgrid}>
           <div className={styles.countDown}>
-            <h2 style={{"width" : "100%"}}>Next word in</h2>
+            <h2 style={{"width" : "100%"}}>Next words in</h2>
             <CountDown
               date={tomorrow}
               daysInHours={true}

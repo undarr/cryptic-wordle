@@ -64,6 +64,7 @@ function App() {
   const [mdisplayhint1, setmdisplayhint1] = useState('');
   const [mdisplayhint2, setmdisplayhint2] = useState('');
   const [mdisplayhint3, setmdisplayhint3] = useState('');
+  const [mhintword, setmhintword] = useState(WORDS[0]);
   const [mvideo, setmvideo] = useState('www.example.com');
   const [msolution, setmsolution] = useState(WORDS[0]);
   const [manswerlength, setmanswerlength] = useState(0);
@@ -71,6 +72,7 @@ function App() {
   const [dclue, setdclue] = useState('Loading...');
   const [dhint, setdhint] = useState('Loading...');
   const [ddisplayhint, setddisplayhint] = useState('');
+  const [dhintword, setdhintword] = useState(WORDS[0]);
   const [dvideo, setdvideo] = useState('Loading...');
   const [dsolution, setdsolution] = useState(WORDS[0]);
   const [danswerlength, setdanswerlength] = useState(0);
@@ -152,12 +154,21 @@ function App() {
               setmhintt3(data.split(' ()minc() ')[7]);
               setmvideo(data.split(' ()minc() ')[8]);
               setmanswerlength(newsol.length);
+              setmhintword(
+                startguess(newsol) +
+                  ' '.repeat(newsol.length - startguess(newsol).length)
+              );
 
+              const newdsol = ddata.split(' ()dc() ')[0];
               setdclue(ddata.split(' ()dc() ')[1]);
-              setdsolution(ddata.split(' ()dc() ')[0]);
+              setdsolution(newdsol);
               setdhint(ddata.split(' ()dc() ')[3]);
               setdvideo(ddata.split(' ()dc() ')[2]);
               setdanswerlength(ddata.split(' ()dc() ')[0].length);
+              setdhintword(
+                startguess(newdsol) +
+                  ' '.repeat(newdsol.length - startguess(newdsol).length)
+              );
             })
             .catch(error => {
               console.error('Error making the request:', error);
@@ -247,6 +258,8 @@ function App() {
   const [isdGameWon, setIsdGameWon] = useState(false);
   const [ismGameLost, setIsmGameLost] = useState(false);
   const [isdGameLost, setIsdGameLost] = useState(false);
+  const [mhintused, setmhintused] = useState(0);
+  const [dhintused, setdhintused] = useState(0);
   const [isJiggling, setIsJiggling] = useState(false);
   const [isHintModalOpen, setIsHintModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
@@ -287,26 +300,45 @@ function App() {
     if (guesses.includes(solution.toUpperCase())) {
       if (sclue === 'M') {
         setIsmGameWon(true);
+        setmhintused(
+          (mdisplayhint1 === '' ? 0 : 1) +
+            (mdisplayhint2 === '' ? 0 : 1) +
+            (mdisplayhint3 === '' ? 0 : 1)
+        );
+        showhint1();
+        showhint2();
+        showhint3();
       } else {
         setIsdGameWon(true);
+        setdhintused(ddisplayhint === '' ? 0 : 1);
+        showhint1();
       }
       setTimeout(() => showAlert('Well done', 'success'), ALERT_DELAY);
       setTimeout(() => setIsStatsModalOpen(true), ALERT_DELAY + 1000);
     } else if (guesses.length === MAX_CHALLENGES) {
       if (sclue === 'M') {
         setIsmGameLost(true);
+        setmhintused(
+          (mdisplayhint1 === '' ? 0 : 1) +
+            (mdisplayhint2 === '' ? 0 : 1) +
+            (mdisplayhint3 === '' ? 0 : 1)
+        );
+        showhint1();
+        showhint2();
+        showhint3();
       } else {
         setIsdGameLost(true);
+        setdhintused(ddisplayhint === '' ? 0 : 1);
+        showhint1();
       }
       setTimeout(
-        () => showAlert(`The word was ${solution}`, 'error', true),
+        () => showAlert(`The word is ${solution}`, 'error', true),
         ALERT_DELAY
       );
       setTimeout(() => setIsStatsModalOpen(true), ALERT_DELAY + 1000);
     } else if (guesses.length === MAX_CHALLENGES - 1) {
       setTimeout(() => showAlert('Last chance!', 'error', false), 500);
     }
-    // eslint-disable-next-line
   }, [mguesses, dguesses]);
 
   useEffect(() => {
@@ -472,7 +504,7 @@ ${
   ismGameLost || ismGameWon
     ? `✨ ${
         ismGameLost ? 'X' : mguesses.length
-      }/${MAX_CHALLENGES} guesses with X hints!
+      }/${MAX_CHALLENGES} guesses with ${mhintused}/3 hints!
 ${generateEmojiGrid(mguesses, msolution)}`
     : '❓ Unattempted/Unfinished'
 }
@@ -483,7 +515,7 @@ ${
   isdGameLost || isdGameWon
     ? `✨ ${
         isdGameLost ? 'X' : dguesses.length
-      }/${MAX_CHALLENGES} guesses with X hints!
+      }/${MAX_CHALLENGES} guesses with ${dhintused}/1 hints!
 ${generateEmojiGrid(dguesses, dsolution)}`
     : '❓ Unattempted/Unfinished'
 }`;
@@ -576,15 +608,18 @@ ${generateEmojiGrid(dguesses, dsolution)}`
   const genmsg = l => {
     if (l === 'M') {
       const hintused =
-        (mdisplayhint1 === '' ? 0 : 1) +
-        (mdisplayhint2 === '' ? 0 : 1) +
-        (mdisplayhint3 === '' ? 0 : 1);
+        ismGameLost || ismGameWon
+          ? mhintused
+          : (mdisplayhint1 === '' ? 0 : 1) +
+            (mdisplayhint2 === '' ? 0 : 1) +
+            (mdisplayhint3 === '' ? 0 : 1);
       return `${ismGameLost ? '💀' : ismGameWon ? '✨' : '🤔 At'} ${
         ismGameLost ? 'X' : mguesses.length
       }/${MAX_CHALLENGES} guesses with ${hintused}/3 hints!`;
     }
     if (l === 'D') {
-      const hintused = ddisplayhint === '' ? 0 : 1;
+      const hintused =
+        isdGameLost || isdGameWon ? dhintused : ddisplayhint === '' ? 0 : 1;
       return `${isdGameLost ? '💀' : isdGameWon ? '✨' : '🤔 At'} ${
         isdGameLost ? 'X' : dguesses.length
       }/${MAX_CHALLENGES} guesses with ${hintused}/1 hints!`;
@@ -769,6 +804,9 @@ DCryptic Wordle #${solutionIndex - 75}
         ht1={mhintt1}
         ht2={mhintt2}
         ht3={mhintt3}
+        hintword={sclue === 'M' ? mhintword : dhintword}
+        sol={sclue === 'M' ? msolution : dsolution}
+        getGuessStatuses={getGuessStatuses}
       />
       <InfoModal
         isOpen={isInfoModalOpen}
