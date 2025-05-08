@@ -63,9 +63,9 @@ const HintModal = ({ isOpen, onClose, sclue, clue, sh1, sh2, sh3, dh1, dh2, dh3,
           />
       ))}
       </div>
-      <button class={dh1===''? styles.showhintbut : styles.shownhintbut} onClick={sh1}>{dh1===''? `🔒 Show ${ht1}` : `🔓 ${dh1}`}</button>
-      {sclue==='D' ? <></> : <><button class={dh2===''? styles.showhintbut : styles.shownhintbut} onClick={sh2}>{dh2===''? `🔒 Show ${ht2}` : `🔓 ${dh2}`}</button>
-      <button class={dh3===''? styles.showhintbut : styles.shownhintbut} onClick={sh3}>{dh3===''? `🔒 Show ${ht3}` : `🔓 ${dh3}`}</button></>}
+      <button class={dh1===''? styles.showhintbut : styles.shownhintbut} onClick={sh1}>{dh1===''? `🔒 Show ${ht1}` : `${dh1}`}</button>
+      {sclue==='D' ? <></> : <><button class={dh2===''? styles.showhintbut : styles.shownhintbut} onClick={sh2}>{dh2===''? `🔒 Show ${ht2}` : `${dh2}`}</button>
+      <button class={dh3===''? styles.showhintbut : styles.shownhintbut} onClick={sh3}>{dh3===''? `🔒 Show ${ht3}` : `${dh3}`}</button></>}
     </Modal>
   );
 };

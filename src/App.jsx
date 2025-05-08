@@ -631,25 +631,51 @@ ${generateEmojiGrid(dguesses, dsolution)}`
   const showhint1 = () => {
     if (sclue === 'M') {
       setmdisplayhint1(
-        mhintt1.charAt(0).toUpperCase() + mhintt1.slice(1) + ' : ' + mhint1
+        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          mhintt1.charAt(0).toUpperCase() +
+          mhintt1.slice(1) +
+          ' : ' +
+          mhint1
       );
       setdisplayhint1(
-        mhintt1.charAt(0).toUpperCase() + mhintt1.slice(1) + ' : ' + mhint1
+        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          mhintt1.charAt(0).toUpperCase() +
+          mhintt1.slice(1) +
+          ' : ' +
+          mhint1
       );
     }
     if (sclue === 'D') {
-      setddisplayhint('Definition : "' + dhint + '"');
-      setdisplayhint1('Definition : "' + dhint + '"');
+      setddisplayhint(
+        (isdGameWon ? '✨ ' : isdGameLost ? '💀 ' : '🔓 ') +
+          'Definition : "' +
+          dhint +
+          '"'
+      );
+      setdisplayhint1(
+        (isdGameWon ? '✨ ' : isdGameLost ? '💀 ' : '🔓 ') +
+          'Definition : "' +
+          dhint +
+          '"'
+      );
     }
   };
 
   const showhint2 = () => {
     if (sclue === 'M') {
       setmdisplayhint2(
-        mhintt2.charAt(0).toUpperCase() + mhintt2.slice(1) + ' : ' + mhint2
+        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          mhintt2.charAt(0).toUpperCase() +
+          mhintt2.slice(1) +
+          ' : ' +
+          mhint2
       );
       setdisplayhint2(
-        mhintt2.charAt(0).toUpperCase() + mhintt2.slice(1) + ' : ' + mhint2
+        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          mhintt2.charAt(0).toUpperCase() +
+          mhintt2.slice(1) +
+          ' : ' +
+          mhint2
       );
     }
     if (sclue === 'D') {
@@ -660,10 +686,18 @@ ${generateEmojiGrid(dguesses, dsolution)}`
   const showhint3 = () => {
     if (sclue === 'M') {
       setmdisplayhint3(
-        mhintt3.charAt(0).toUpperCase() + mhintt3.slice(1) + ' : ' + mhint3
+        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          mhintt3.charAt(0).toUpperCase() +
+          mhintt3.slice(1) +
+          ' : ' +
+          mhint3
       );
       setdisplayhint3(
-        mhintt3.charAt(0).toUpperCase() + mhintt3.slice(1) + ' : ' + mhint3
+        (ismGameWon ? '✨ ' : ismGameLost ? '💀 ' : '🔓 ') +
+          mhintt3.charAt(0).toUpperCase() +
+          mhintt3.slice(1) +
+          ' : ' +
+          mhint3
       );
     }
     if (sclue === 'D') {
