@@ -5,7 +5,7 @@ import { MAX_CHALLENGES } from 'constants/settings';
 import styles from './Grid.module.scss';
 
 const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatuses, MAX_WORD_LENGTH, clue,
-  sol,isGameWon,hide,clueby}) => {
+  sol,isGameWon,hide,clueby,revealed}) => {
   const empties =
     MAX_CHALLENGES > guesses.length
       ? Array(MAX_CHALLENGES - guesses.length - 1).fill()
@@ -66,7 +66,7 @@ const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatus
         );
     })}</h2><p>{clueby}</p>
       {guesses.map((guess, i) => (
-        <CompletedRow key={i} guess={guess} getGuessStatuses={getGuessStatuses} MAX_WORD_LENGTH={MAX_WORD_LENGTH} guesslength={guesses.length} sol={sol}/>
+        <CompletedRow key={i} guess={guess} getGuessStatuses={getGuessStatuses} MAX_WORD_LENGTH={MAX_WORD_LENGTH} guesslength={guesses.length} sol={sol} revealed={revealed}/>
       ))}
       {!isGameWon && guesses.length < MAX_CHALLENGES && (
         <CurrentRow guess={currentGuess} isJiggling={isJiggling} MAX_WORD_LENGTH={MAX_WORD_LENGTH} guesslength={guesses.length}/>
@@ -88,7 +88,7 @@ const CurrentRow = ({ guess, isJiggling, MAX_WORD_LENGTH, guesslength}) => {
   });
 
   return (
-    <div className={classes} style={{"grid-template-columns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>
+    <div className={classes} style={{"gridTemplateColumns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>
       {cells.map((letter, index) => (
         <Cell key={index} value={letter} wordlength={MAX_WORD_LENGTH} guesslength={guesslength} />
       ))}
@@ -96,12 +96,12 @@ const CurrentRow = ({ guess, isJiggling, MAX_WORD_LENGTH, guesslength}) => {
   );
 };
 
-const CompletedRow = ({ guess, getGuessStatuses, MAX_WORD_LENGTH, guesslength, sol}) => {
+const CompletedRow = ({ guess, getGuessStatuses, MAX_WORD_LENGTH, guesslength, sol,revealed}) => {
   const cells = guess.split('');
-  const statuses = getGuessStatuses(guess,sol);
+  const statuses = getGuessStatuses(guess,sol,revealed);
 
   return (
-    <div className={styles.row} style={{"grid-template-columns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>
+    <div className={styles.row} style={{"gridTemplateColumns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>
       {cells.map((letter, index) => (
         <Cell
           key={index}
@@ -121,7 +121,7 @@ const EmptyRow = ({MAX_WORD_LENGTH, guesslength}) => {
   const cells = Array(MAX_WORD_LENGTH).fill();
 
   return (
-    <div className={styles.row} style={{"grid-template-columns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>
+    <div className={styles.row} style={{"gridTemplateColumns": "repeat("+MAX_WORD_LENGTH+", 1fr)"}}>
       {cells.map((_, index) => (
         <Cell key={index} wordlength={MAX_WORD_LENGTH} guesslength={guesslength}/>
       ))}

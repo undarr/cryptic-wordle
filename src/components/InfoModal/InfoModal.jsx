@@ -9,7 +9,7 @@ const InfoModal = ({ isOpen, onClose }) => {
         Guess the CRYPTIC WORDLE based on the clue in 10 tries. Each guess must be a valid word. Hit the enter button to submit. After each guess, the color of the
         tiles will change to show how close your guess was to the word.
       </h3>
-      <div style={{"max-width":"368px", "margin":"0 auto"}}>
+      <div style={{"maxWidth":"368px", "margin":"0 auto"}}>
       <div className={styles.row}>
         <Cell infocell="true" value="W" status="correct" isCompleted/>
         <Cell infocell="true" value="E" />

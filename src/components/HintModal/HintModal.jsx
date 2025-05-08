@@ -23,9 +23,9 @@ const splitline = (inputText,n=30) => {
   return (lines.join(' \n '));
 };
 
-const HintModal = ({ isOpen, onClose, sclue, clue, sh1, sh2, sh3, dh1, dh2, dh3, ht1, ht2, ht3 ,hintword, sol, getGuessStatuses, onclick}) => {
+const HintModal = ({ isOpen, onClose, sclue, clue, sh1, sh2, sh3, dh1, dh2, dh3, ht1, ht2, ht3 ,hintword, sol, getGuessStatuses, onclick, revealed}) => {
   const cells = hintword.split('');
-  const statuses = getGuessStatuses(hintword,sol);
+  const statuses = getGuessStatuses(hintword,sol,revealed);
   return (
     <Modal title={'Hints'} isOpen={isOpen} onClose={onClose} nogap={true}>
       <h2 style={{ textAlign: 'center' }}>{splitline(clue).split(' ').map((word, index) => {
@@ -48,7 +48,7 @@ const HintModal = ({ isOpen, onClose, sclue, clue, sh1, sh2, sh3, dh1, dh2, dh3,
             </span>
         );
     })}</h2>
-      <h3 class={styles.newh3}>Click on a vacant cell below to reveal a letter.</h3>
+      <h3 className={styles.newh3}>Click on a vacant cell below to reveal a letter.</h3>
       <div className={styles.row} style={{"grid-template-columns": `repeat(${sol.length}, 1fr)`}}>
         {cells.map((letter, index) => (
           <Cell
@@ -63,9 +63,9 @@ const HintModal = ({ isOpen, onClose, sclue, clue, sh1, sh2, sh3, dh1, dh2, dh3,
           />
       ))}
       </div>
-      <button class={dh1===''? styles.showhintbut : styles.shownhintbut} onClick={sh1}>{dh1===''? `🔒 Show ${ht1}` : `${dh1}`}</button>
-      {sclue==='D' ? <></> : <><button class={dh2===''? styles.showhintbut : styles.shownhintbut} onClick={sh2}>{dh2===''? `🔒 Show ${ht2}` : `${dh2}`}</button>
-      <button class={dh3===''? styles.showhintbut : styles.shownhintbut} onClick={sh3}>{dh3===''? `🔒 Show ${ht3}` : `${dh3}`}</button></>}
+      <button className={dh1===''? styles.showhintbut : styles.shownhintbut} onClick={() => {sh1();}}>{dh1===''? `🔒 Show ${ht1}` : `${dh1}`}</button>
+      {sclue==='D' ? <></> : <><button className={dh2===''? styles.showhintbut : styles.shownhintbut} onClick={() => {sh2();}}>{dh2===''? `🔒 Show ${ht2}` : `${dh2}`}</button>
+      <button className={dh3===''? styles.showhintbut : styles.shownhintbut} onClick={() => {sh3();}}>{dh3===''? `🔒 Show ${ht3}` : `${dh3}`}</button></>}
     </Modal>
   );
 };

@@ -409,11 +409,7 @@ function App() {
     );
   };
 
-  const getGuessStatuses = (
-    guess,
-    sol = sclue === 'M' ? msolution : dsolution,
-    revealed = sclue === 'M' ? mrevealed : drevealed
-  ) => {
+  const getGuessStatuses = (guess, sol, revealed) => {
     const splitGuess = guess.toLowerCase().split('');
     const splitSolution = sol.split('');
     const statuses = [];
@@ -422,6 +418,7 @@ function App() {
     // handle all correct cases first
     splitGuess.forEach((letter, i) => {
       if (letter === splitSolution[i]) {
+        statuses[i] = 'correct';
         if (letter.toUpperCase() === revealed[i].toUpperCase()) {
           statuses[i] = 'revealed';
         } else {
@@ -558,7 +555,9 @@ function App() {
     const textToShare = `Cryptic Wordle
 https://ucrypticwordle.netlify.app/
 
-MCryptic Wordle #${solutionIndex}
+MCryptic Wordle #${solutionIndex} ${mdisplayhint1 === '' ? '🔒' : '🔓'}${
+      mdisplayhint2 === '' ? '🔒' : '🔓'
+    }${mdisplayhint3 === '' ? '🔒' : '🔓'}
 - ${mclue}
 ${
   ismGameLost || ismGameWon
@@ -571,7 +570,7 @@ ${generateEmojiGrid(mguesses, msolution)}`
     : '❓ Unattempted/Unfinished'
 }
 
-DCryptic Wordle #${solutionIndex - 75}
+DCryptic Wordle #${solutionIndex - 75} ${ddisplayhint === '' ? '🔒' : '🔓'}
 - ${dclue}
 ${
   isdGameLost || isdGameWon
@@ -932,6 +931,7 @@ DCryptic Wordle #${solutionIndex - 75}
         isGameWon={ismGameWon}
         hide={sclue !== 'M'}
         clueby={'Clue by ' + mclueby}
+        revealed={mrevealed}
       />
       <Grid
         currentGuess={tosolu(dcurrentGuess)}
@@ -948,6 +948,7 @@ DCryptic Wordle #${solutionIndex - 75}
         isGameWon={isdGameWon}
         hide={sclue !== 'D'}
         clueby={''}
+        revealed={drevealed}
       />
       <Keyboard
         onEnter={handleEnter}
@@ -974,6 +975,7 @@ DCryptic Wordle #${solutionIndex - 75}
         sol={sclue === 'M' ? msolution : dsolution}
         getGuessStatuses={getGuessStatuses}
         onclick={revealletter}
+        revealed={sclue === 'M' ? mrevealed : drevealed}
       />
       <InfoModal
         isOpen={isInfoModalOpen}

@@ -19,7 +19,7 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hint
     }
     else {
       width = Math.min(55,Math.floor((window.innerWidth-100)/wordlength));
-      height = Math.min(55,Math.floor((window.innerHeight*0.35)/Math.min(guesslength,MAX_CHALLENGES-1)));
+      height = Math.min(55,Math.floor((window.innerHeight*0.33)/Math.min(guesslength,MAX_CHALLENGES-1)));
       fs = `${Math.round(height*26/55)/10}rem`;
     }
   } else {
@@ -35,7 +35,7 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hint
     }
     else {
       width = Math.min(60,Math.floor((window.innerWidth-100)/wordlength));
-      height = Math.min(60,Math.floor((window.innerHeight*0.35)/guesslength));
+      height = Math.min(60,Math.floor((window.innerHeight*0.33)/guesslength));
       fs = `${Math.round(height*26/60)/10}rem`;
     }
   }
@@ -53,7 +53,7 @@ const Cell = ({ value, status, position, isCompleted, wordlength, infocell, hint
   const animationDelay = `${position * 0.35}s`;
 
   return (
-    <div className={classes} style={{animationDelay, "width": width , "height": height, "font-size": fs,
+    <div className={classes} style={{animationDelay, "width": width , "height": height, "fontSize": fs,
     "cursor": (hintcell === "true" && status === 'absent') ? "pointer" : "default"}}
     onClick={(hintcell === "true" && status === 'absent') ? () => {onclick(actionpos);} : () => {}}>
       <span className={styles.letter} style={{animationDelay}}>
