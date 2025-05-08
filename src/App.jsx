@@ -69,6 +69,7 @@ function App() {
   const [mvideo, setmvideo] = useState('www.example.com');
   const [msolution, setmsolution] = useState(WORDS[0]);
   const [manswerlength, setmanswerlength] = useState(0);
+  const [mclueby, setmclueby] = useState('Loading...');
 
   const [dclue, setdclue] = useState('Loading...');
   const [dhint, setdhint] = useState('Loading...');
@@ -155,6 +156,7 @@ function App() {
               setmhintt2(data.split(' ()minc() ')[6]);
               setmhintt3(data.split(' ()minc() ')[7]);
               setmvideo(data.split(' ()minc() ')[8]);
+              setmclueby(data.split(' ()minc() ')[9]);
               setmanswerlength(newsol.length);
               setmhintword(
                 startguess(newsol) +
@@ -882,6 +884,7 @@ DCryptic Wordle #${solutionIndex - 75}
         sol={msolution}
         isGameWon={ismGameWon}
         hide={sclue !== 'M'}
+        clueby={sclue === 'M' ? 'Clue by ' + mclueby : ''}
       />
       <Grid
         currentGuess={tosolu(dcurrentGuess)}

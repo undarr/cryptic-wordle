@@ -5,7 +5,7 @@ import { MAX_CHALLENGES } from 'constants/settings';
 import styles from './Grid.module.scss';
 
 const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatuses, MAX_WORD_LENGTH, clue,
-  sol,isGameWon,hide}) => {
+  sol,isGameWon,hide,clueby}) => {
   const empties =
     MAX_CHALLENGES > guesses.length
       ? Array(MAX_CHALLENGES - guesses.length - 1).fill()
@@ -64,7 +64,7 @@ const Grid = ({ currentGuess, guesses, isJiggling, setIsJiggling, getGuessStatus
                 {word}
             </span>
         );
-    })}</h2>
+    })}</h2><p>{clueby}</p>
       {guesses.map((guess, i) => (
         <CompletedRow key={i} guess={guess} getGuessStatuses={getGuessStatuses} MAX_WORD_LENGTH={MAX_WORD_LENGTH} guesslength={guesses.length} sol={sol}/>
       ))}
