@@ -214461,6 +214461,7 @@ export const VALID_GUESSES = [
 'senectitude',
 'senectitudes',
 'senega',
+'senegal',
 'senegas',
 'senes',
 'senescence',

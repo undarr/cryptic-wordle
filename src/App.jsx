@@ -484,10 +484,17 @@ function App() {
     const splitGuess = guess.toUpperCase().split('');
 
     for (let i = 0; i < splitGuess.length; i++) {
-      if (statuses[i] === 'correct' || statuses[i] === 'present')
+      if (
+        statuses[i] === 'correct' ||
+        statuses[i] === 'present' ||
+        statuses[i] === 'revealed'
+      )
         lettersLeftArray.push(splitGuess[i]);
 
-      if (statuses[i] === 'correct' && splitWord[i] !== splitGuess[i])
+      if (
+        (statuses[i] === 'correct' || statuses[i] === 'revealed') &&
+        splitWord[i] !== splitGuess[i]
+      )
         return `Must use ${splitGuess[i]} in position ${i + 1}`;
     }
 
