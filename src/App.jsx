@@ -152,13 +152,11 @@ function App() {
               setmclueby(data.split(' ()minc() ')[9]);
               setmanswerlength(newsol.length);
               setmhintword(
-                startguess(newsol) +
-                  ' '.repeat(newsol.length - startguess(newsol).length)
+                tosolu(startguess(newsol)) +
+                  ' '.repeat(newsol.length - tosolu(startguess(newsol)).length)
               );
-              setmrevealed(
-                startguess(newsol) +
-                  ' '.repeat(newsol.length - startguess(newsol).length)
-              );
+              setmrevealed(' '.repeat(newsol.length));
+              setmCurrentGuess(startguess(newsol));
 
               const newdsol = ddata.split(' ()dc() ')[0];
               setdclue(ddata.split(' ()dc() ')[1]);
@@ -218,13 +216,14 @@ function App() {
                     setmvideo(data.split(' ()minc() ')[8]);
                     setmanswerlength(newsol.length);
                     setmhintword(
-                      startguess(newsol) +
+                      newsol +
                         ' '.repeat(newsol.length - startguess(newsol).length)
                     );
                     setmrevealed(
-                      startguess(newsol) +
+                      newsol +
                         ' '.repeat(newsol.length - startguess(newsol).length)
                     );
+                    setmCurrentGuess(startguess(newsol));
 
                     const newdsol = ddata.split(' ()dc() ')[0];
                     setdclue(ddata.split(' ()dc() ')[1]);
@@ -322,7 +321,7 @@ function App() {
           (mdisplayhint1 === '' ? 0 : 1) +
             (mdisplayhint2 === '' ? 0 : 1) +
             (mdisplayhint3 === '' ? 0 : 1) +
-            mrevealed.length -
+            mrevealed.split('').filter(c => c !== '-').length -
             mrevealed.split('').filter(c => c === ' ').length
         );
         showhint1('✨ ');
@@ -346,7 +345,7 @@ function App() {
           (mdisplayhint1 === '' ? 0 : 1) +
             (mdisplayhint2 === '' ? 0 : 1) +
             (mdisplayhint3 === '' ? 0 : 1) +
-            mrevealed.length -
+            mrevealed.split('').filter(c => c !== '-').length -
             mrevealed.split('').filter(c => c === ' ').length
         );
         showhint1('💀 ');
@@ -558,7 +557,7 @@ ${
     ? `${ismGameLost ? '💀' : '✨'} ${
         ismGameLost ? 'X' : mguesses.length
       }/${MAX_CHALLENGES} guesses with ${mhintused}/${
-        3 + mrevealed.length
+        3 + mrevealed.split('').filter(c => c !== '-').length
       } hints!
 ${generateEmojiGrid(mguesses, msolution, mrevealed)}`
     : '❓ Unattempted/Unfinished'
@@ -712,12 +711,12 @@ ${generateEmojiGrid(dguesses, dsolution, drevealed)}`
           : (mdisplayhint1 === '' ? 0 : 1) +
             (mdisplayhint2 === '' ? 0 : 1) +
             (mdisplayhint3 === '' ? 0 : 1) +
-            mrevealed.length -
+            mrevealed.split('').filter(c => c !== '-').length -
             mrevealed.split('').filter(c => c === ' ').length;
       return `${ismGameLost ? '💀' : ismGameWon ? '✨' : '🤔 At'} ${
         ismGameLost ? 'X' : mguesses.length
       }/${MAX_CHALLENGES} guesses with ${hintused}/${
-        3 + mrevealed.length
+        3 + mrevealed.split('').filter(c => c !== '-').length
       } hints!`;
     }
     if (l === 'D') {
