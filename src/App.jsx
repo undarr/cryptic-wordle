@@ -321,7 +321,7 @@ function App() {
           (mdisplayhint1 === '' ? 0 : 1) +
             (mdisplayhint2 === '' ? 0 : 1) +
             (mdisplayhint3 === '' ? 0 : 1) +
-            mhintword.split('').filter(c => c !== '-').length -
+            mrevealed.split('').filter(c => c !== '-').length -
             mrevealed.split('').filter(c => c === ' ').length
         );
         showhint1('✨ ');
@@ -345,7 +345,7 @@ function App() {
           (mdisplayhint1 === '' ? 0 : 1) +
             (mdisplayhint2 === '' ? 0 : 1) +
             (mdisplayhint3 === '' ? 0 : 1) +
-            mhintword.split('').filter(c => c !== '-').length -
+            mrevealed.split('').filter(c => c !== '-').length -
             mrevealed.split('').filter(c => c === ' ').length
         );
         showhint1('💀 ');
@@ -558,8 +558,8 @@ ${
         ismGameLost ? 'X' : mguesses.length
       }/${MAX_CHALLENGES} guesses with ${mhintused}/${
         3 +
-        mrevealed.split('').filter(c => c !== '-').length -
-        mhintword.split('').filter(c => c === '-').length
+        mrevealed.split('').length -
+        msolution.split('').filter(c => c === '-').length
       } hints!
 ${generateEmojiGrid(mguesses, msolution, mrevealed)}`
     : '❓ Unattempted/Unfinished'
@@ -713,14 +713,14 @@ ${generateEmojiGrid(dguesses, dsolution, drevealed)}`
           : (mdisplayhint1 === '' ? 0 : 1) +
             (mdisplayhint2 === '' ? 0 : 1) +
             (mdisplayhint3 === '' ? 0 : 1) +
-            mhintused.split('').filter(c => c !== '-').length -
+            mrevealed.split('').filter(c => c !== '-').length -
             mrevealed.split('').filter(c => c === ' ').length;
       return `${ismGameLost ? '💀' : ismGameWon ? '✨' : '🤔 At'} ${
         ismGameLost ? 'X' : mguesses.length
       }/${MAX_CHALLENGES} guesses with ${hintused}/${
         3 +
-        mrevealed.split('').filter(c => c !== '-').length -
-        mhintword.split('').filter(c => c === '-').length
+        mrevealed.split('').length -
+        msolution.split('').filter(c => c === '-').length
       } hints!`;
     }
     if (l === 'D') {
