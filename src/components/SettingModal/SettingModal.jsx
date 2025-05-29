@@ -27,7 +27,7 @@ const SettingModal = ({
         isOn={isHighContrastMode}
         onToggle={setIsHighContrastMode}
       />
-      <button className={styles.resetbut} onClick={() => {localStorage.clear(); window.location.reload();}}>Full Reload page</button>
+      <button className={styles.resetbut} onClick={() => {localStorage.clear(); window.location.reload();}}>Refresh all data</button>
     </Modal>
   );
 };
