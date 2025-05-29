@@ -29,3 +29,16 @@
   margin: 0;
   color: var(--color-text-secondary);
 }
+
+.resetbut {
+  margin: 0 auto 10px;
+  font-family: 'Baloo 2', sans-serif;
+  background: #a01ef7;
+  width: 60%;
+  display: block;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 1.3rem;
+  font-weight: 500;
+  padding: 0.2rem 1rem;
+}

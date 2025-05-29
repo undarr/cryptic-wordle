@@ -48,7 +48,7 @@ function App() {
     solutionIndex: '',
   });
   */
-  const [sclue, setsclue] = useState('M');
+  const [sclue, setsclue] = useLocalStorage('state', 'M');
   const [displayhint1, setdisplayhint1] = useState('');
   const [displayhint2, setdisplayhint2] = useState('');
   const [displayhint3, setdisplayhint3] = useState('');
@@ -60,11 +60,11 @@ function App() {
   const [mhintt1, setmhintt1] = useState('-Loading...');
   const [mhintt2, setmhintt2] = useState('-Loading...');
   const [mhintt3, setmhintt3] = useState('-Loading...');
-  const [mdisplayhint1, setmdisplayhint1] = useState('');
-  const [mdisplayhint2, setmdisplayhint2] = useState('');
-  const [mdisplayhint3, setmdisplayhint3] = useState('');
-  const [mhintword, setmhintword] = useState(WORDS[0]);
-  const [mrevealed, setmrevealed] = useState(WORDS[0]);
+  const [mdisplayhint1, setmdisplayhint1] = useLocalStorage('mdh1', '');
+  const [mdisplayhint2, setmdisplayhint2] = useLocalStorage('mdh2', '');
+  const [mdisplayhint3, setmdisplayhint3] = useLocalStorage('mdh3', '');
+  const [mhintword, setmhintword] = useLocalStorage('mhw', WORDS[0]);
+  const [mrevealed, setmrevealed] = useLocalStorage('mr', WORDS[0]);
   const [mvideo, setmvideo] = useState('www.example.com');
   const [msolution, setmsolution] = useState(WORDS[0]);
   const [manswerlength, setmanswerlength] = useState(0);
@@ -72,9 +72,9 @@ function App() {
 
   const [dclue, setdclue] = useState('Loading...');
   const [dhint, setdhint] = useState('Loading...');
-  const [ddisplayhint, setddisplayhint] = useState('');
-  const [dhintword, setdhintword] = useState(WORDS[0]);
-  const [drevealed, setdrevealed] = useState(WORDS[0]);
+  const [ddisplayhint, setddisplayhint] = useLocalStorage('ddh', '');
+  const [dhintword, setdhintword] = useLocalStorage('dhw', WORDS[0]);
+  const [drevealed, setdrevealed] = useLocalStorage('dr', WORDS[0]);
   const [dvideo, setdvideo] = useState('Loading...');
   const [dsolution, setdsolution] = useState(WORDS[0]);
   const [danswerlength, setdanswerlength] = useState(0);
@@ -106,6 +106,64 @@ function App() {
   const [solutionIndex, setsolutionIndex] = useState(0);
   const [tomorrow, settomorrow] = useState(1);
   useEffect(() => {
+    function initloadfetch(response) {
+      const data =
+        response.data.result.capturedTexts.clue.split(' ()big() ')[0];
+      const ddata =
+        response.data.result.capturedTexts.clue.split(' ()big() ')[1];
+      const newsol = data.split(' ()minc() ')[1].replace(/ /g, '-');
+      setmclue(data.split(' ()minc() ')[0]);
+      setmsolution(newsol);
+      setmhint1(data.split(' ()minc() ')[2]);
+      setmhint2(data.split(' ()minc() ')[3]);
+      setmhint3(data.split(' ()minc() ')[4]);
+      setmhintt1(data.split(' ()minc() ')[5]);
+      setmhintt2(data.split(' ()minc() ')[6]);
+      setmhintt3(data.split(' ()minc() ')[7]);
+      setmvideo(data.split(' ()minc() ')[8]);
+      setmclueby(data.split(' ()minc() ')[9]);
+      setmanswerlength(newsol.length);
+      setmCurrentGuess(startguess(newsol));
+
+      const newdsol = ddata.split(' ()dc() ')[0];
+      setdclue(ddata.split(' ()dc() ')[1]);
+      setdsolution(newdsol);
+      setdhint(ddata.split(' ()dc() ')[3]);
+      setdvideo(ddata.split(' ()dc() ')[2]);
+      setdanswerlength(ddata.split(' ()dc() ')[0].length);
+      function stringToHash(string) {
+        return string.split('').reduce((hash, char) => {
+          return char.charCodeAt(0) + (hash << 6) + (hash << 16) - hash;
+        }, 0);
+      }
+      if (
+        localStorage.getItem('fetchres') ===
+        stringToHash(response.data.result.capturedTexts.clue).toString()
+      ) {
+        setmGuesses(mguessesc);
+        setdGuesses(dguessesc);
+        swapclue(sclue);
+      } else {
+        localStorage.clear();
+        localStorage.setItem(
+          'fetchres',
+          stringToHash(response.data.result.capturedTexts.clue)
+        );
+        setIsInfoModalOpen(true);
+        setmhintword(
+          tosolu(startguess(newsol)) +
+            ' '.repeat(newsol.length - tosolu(startguess(newsol)).length)
+        );
+        setmrevealed(' '.repeat(newsol.length));
+        setdhintword(
+          startguess(newdsol) +
+            ' '.repeat(newdsol.length - startguess(newdsol).length)
+        );
+        setdrevealed(' '.repeat(newdsol.length));
+        setmGuessesc([]);
+        setdGuessesc([]);
+      }
+    }
     const epochMs = 1740355200000;
     const now = Date.now();
     const msInDay = 86400000;
@@ -135,43 +193,7 @@ function App() {
           axios
             .get(url, { headers })
             .then(response => {
-              const data =
-                response.data.result.capturedTexts.clue.split(' ()big() ')[0];
-              const ddata =
-                response.data.result.capturedTexts.clue.split(' ()big() ')[1];
-              const newsol = data.split(' ()minc() ')[1].replace(/ /g, '-');
-              setmclue(data.split(' ()minc() ')[0]);
-              setmsolution(newsol);
-              setmhint1(data.split(' ()minc() ')[2]);
-              setmhint2(data.split(' ()minc() ')[3]);
-              setmhint3(data.split(' ()minc() ')[4]);
-              setmhintt1(data.split(' ()minc() ')[5]);
-              setmhintt2(data.split(' ()minc() ')[6]);
-              setmhintt3(data.split(' ()minc() ')[7]);
-              setmvideo(data.split(' ()minc() ')[8]);
-              setmclueby(data.split(' ()minc() ')[9]);
-              setmanswerlength(newsol.length);
-              setmhintword(
-                tosolu(startguess(newsol)) +
-                  ' '.repeat(newsol.length - tosolu(startguess(newsol)).length)
-              );
-              setmrevealed(' '.repeat(newsol.length));
-              setmCurrentGuess(startguess(newsol));
-
-              const newdsol = ddata.split(' ()dc() ')[0];
-              setdclue(ddata.split(' ()dc() ')[1]);
-              setdsolution(newdsol);
-              setdhint(ddata.split(' ()dc() ')[3]);
-              setdvideo(ddata.split(' ()dc() ')[2]);
-              setdanswerlength(ddata.split(' ()dc() ')[0].length);
-              setdhintword(
-                startguess(newdsol) +
-                  ' '.repeat(newdsol.length - startguess(newdsol).length)
-              );
-              setdrevealed(
-                startguess(newdsol) +
-                  ' '.repeat(newdsol.length - startguess(newdsol).length)
-              );
+              initloadfetch(response);
             })
             .catch(error => {
               console.error('Error making the request:', error);
@@ -194,51 +216,7 @@ function App() {
                 axios
                   .get(url, { headers })
                   .then(response => {
-                    const data =
-                      response.data.result.capturedTexts.clue.split(
-                        ' ()big() '
-                      )[0];
-                    const ddata =
-                      response.data.result.capturedTexts.clue.split(
-                        ' ()big() '
-                      )[1];
-                    const newsol = data
-                      .split(' ()minc() ')[1]
-                      .replace(/ /g, '-');
-                    setmclue(data.split(' ()minc() ')[0]);
-                    setmsolution(newsol);
-                    setmhint1(data.split(' ()minc() ')[2]);
-                    setmhint2(data.split(' ()minc() ')[3]);
-                    setmhint3(data.split(' ()minc() ')[4]);
-                    setmhintt1(data.split(' ()minc() ')[5]);
-                    setmhintt2(data.split(' ()minc() ')[6]);
-                    setmhintt3(data.split(' ()minc() ')[7]);
-                    setmvideo(data.split(' ()minc() ')[8]);
-                    setmanswerlength(newsol.length);
-                    setmhintword(
-                      newsol +
-                        ' '.repeat(newsol.length - startguess(newsol).length)
-                    );
-                    setmrevealed(
-                      newsol +
-                        ' '.repeat(newsol.length - startguess(newsol).length)
-                    );
-                    setmCurrentGuess(startguess(newsol));
-
-                    const newdsol = ddata.split(' ()dc() ')[0];
-                    setdclue(ddata.split(' ()dc() ')[1]);
-                    setdsolution(newdsol);
-                    setdhint(ddata.split(' ()dc() ')[3]);
-                    setdvideo(ddata.split(' ()dc() ')[2]);
-                    setdanswerlength(ddata.split(' ()dc() ')[0].length);
-                    setdhintword(
-                      startguess(newdsol) +
-                        ' '.repeat(newdsol.length - startguess(newdsol).length)
-                    );
-                    setdrevealed(
-                      startguess(newdsol) +
-                        ' '.repeat(newdsol.length - startguess(newdsol).length)
-                    );
+                    initloadfetch(response);
                   })
                   .catch(error => {
                     console.error('Error making the request:', error);
@@ -275,12 +253,14 @@ function App() {
   const [dcurrentGuess, setdCurrentGuess] = useState('');
   const [mguesses, setmGuesses] = useState([]);
   const [dguesses, setdGuesses] = useState([]);
-  const [ismGameWon, setIsmGameWon] = useState(false);
-  const [isdGameWon, setIsdGameWon] = useState(false);
-  const [ismGameLost, setIsmGameLost] = useState(false);
-  const [isdGameLost, setIsdGameLost] = useState(false);
-  const [mhintused, setmhintused] = useState(0);
-  const [dhintused, setdhintused] = useState(0);
+  const [mguessesc, setmGuessesc] = useLocalStorage('mboard', []);
+  const [dguessesc, setdGuessesc] = useLocalStorage('dboard', []);
+  const [ismGameWon, setIsmGameWon] = useLocalStorage('mgw', false);
+  const [isdGameWon, setIsdGameWon] = useLocalStorage('dgw', false);
+  const [ismGameLost, setIsmGameLost] = useLocalStorage('mgl', false);
+  const [isdGameLost, setIsdGameLost] = useLocalStorage('dgl', false);
+  const [mhintused, setmhintused] = useLocalStorage('mhu', 0);
+  const [dhintused, setdhintused] = useLocalStorage('dhu', 0);
   const [isJiggling, setIsJiggling] = useState(false);
   const [isHintModalOpen, setIsHintModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
@@ -292,29 +272,21 @@ function App() {
   const [enterdisable, setenterdisable] = useState(false);
   const { showAlert } = useAlert();
 
-  // Show welcome modal
   useEffect(() => {
-    //if (!boardState.solutionIndex)
-    setTimeout(() => setIsInfoModalOpen(true), 1000);
-    // eslint-disable-next-line
-  }, []);
+    setmGuessesc(mguesses);
+  }, [mguesses, setmGuessesc]);
 
-  /*
-  // Save boardState to localStorage
   useEffect(() => {
-    setBoardState({
-      guesses,
-      solutionIndex,
-    });
-    // eslint-disable-next-line
-  }, [guesses]);
-  */
+    setdGuessesc(dguesses);
+  }, [dguesses, setdGuessesc]);
 
   // Check game winning or losing
   useEffect(() => {
     var guesses = sclue === 'M' ? mguesses : dguesses;
     var solution = sclue === 'M' ? msolution : dsolution;
-    if (guesses.includes(solution.toUpperCase())) {
+    var isgamewon = sclue === 'M' ? ismGameWon : isdGameWon;
+    var isgamelost = sclue === 'M' ? ismGameLost : isdGameLost;
+    if (guesses.includes(solution.toUpperCase()) && !isgamewon) {
       if (sclue === 'M') {
         setIsmGameWon(true);
         setmhintused(
@@ -338,7 +310,7 @@ function App() {
       }
       setTimeout(() => showAlert('Well done', 'success'), ALERT_DELAY);
       setTimeout(() => setIsStatsModalOpen(true), ALERT_DELAY + 1000);
-    } else if (guesses.length === MAX_CHALLENGES) {
+    } else if (guesses.length === MAX_CHALLENGES && !isgamelost) {
       if (sclue === 'M') {
         setIsmGameLost(true);
         setmhintused(
@@ -580,12 +552,6 @@ ${generateEmojiGrid(dguesses, dsolution, drevealed)}`
     : '❓ Unattempted/Unfinished'
 }`;
     navigator.clipboard.writeText(textToShare);
-    console.log(
-      mdisplayhint1,
-      mdisplayhint1[0],
-      mdisplayhint2,
-      mdisplayhint2[0]
-    );
   };
 
   const generateEmojiGrid = (guesses, sol, r) => {
@@ -738,6 +704,7 @@ ${generateEmojiGrid(dguesses, dsolution, drevealed)}`
     }
   };
 
+  /*
   const gensharemsg = () => {
     return `Cryptic Wordle
 https://ucrypticwordle.netlify.app/
@@ -748,6 +715,7 @@ MCryptic Wordle #${solutionIndex}
 DCryptic Wordle #${solutionIndex - 75}
 - ${dclue}`;
   };
+  */
 
   const handleKeyDown = letter => {
     var currentGuess;
@@ -902,7 +870,7 @@ DCryptic Wordle #${solutionIndex - 75}
         setIsInfoModalOpen={setIsInfoModalOpen}
         setIsStatsModalOpen={setIsStatsModalOpen}
         setIsSettingsModalOpen={setIsSettingsModalOpen}
-        sharemsg={gensharemsg()}
+        sharemsg={shareStatus}
         showAlert={showAlert}
         swapclue={swapclue}
         sclue={sclue}

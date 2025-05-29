@@ -4,7 +4,7 @@ import styles from './InfoModal.module.scss';
 
 const InfoModal = ({ isOpen, onClose }) => {
   return (
-    <Modal title={'How to play'} isOpen={isOpen} onClose={onClose}>
+    <Modal title={'CRYPTIC WORDLE'} isOpen={isOpen} onClose={onClose}>
       <h3>
         Guess the CRYPTIC WORDLE based on the clue in 10 tries. Each guess must be a valid word. Hit the enter button to submit. After each guess, the color of the
         tiles will change to show how close your guess was to the word.

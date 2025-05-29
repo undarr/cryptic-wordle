@@ -24,7 +24,7 @@ const Header = ({
       </div>
       <h1>{sclue==="M" ? <a href="https://www.minutecryptic.com/" target="_blank" rel="noopener noreferrer">MCRYPTIC</a> : <a href="https://dailycrypticle.com/dailyclue.html" target="_blank" rel="noopener noreferrer">DCRYPTIC</a>} <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener noreferrer">WORDLE</a></h1>
       <div id="div2" className={styles.butcon2}>
-        <button style={{height: "1.6rem"}} onClick={() => {navigator.clipboard.writeText(sharemsg); showAlert('Clue copied to clipboard', 'success');}}>
+        <button style={{height: "1.6rem"}} onClick={() => {sharemsg(); showAlert('Game copied to clipboard', 'success');}}>
           <BsShareFill size="1.6rem" color="var(--color-icon)"/>
         </button>
         <button style={{height: "1.6rem"}} onClick={() => setIsStatsModalOpen(true)}>
