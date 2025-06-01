@@ -145,11 +145,17 @@ function App() {
         swapclue(sclue);
       } else {
         localStorage.clear();
+
         localStorage.setItem(
           'fetchres',
           stringToHash(response.data.result.capturedTexts.clue)
         );
         setIsInfoModalOpen(true);
+        setsclue('M');
+        setmdisplayhint1('');
+        setmdisplayhint2('');
+        setmdisplayhint3('');
+        setddisplayhint('');
         setmhintword(
           tosolu(startguess(newsol)) +
             ' '.repeat(newsol.length - tosolu(startguess(newsol)).length)
@@ -162,6 +168,12 @@ function App() {
         setdrevealed(' '.repeat(newdsol.length));
         setmGuessesc([]);
         setdGuessesc([]);
+        setIsmGameWon(false);
+        setIsdGameWon(false);
+        setIsmGameLost(false);
+        setIsdGameLost(false);
+        setmhintused(0);
+        setdhintused(0);
       }
     }
     const epochMs = 1740355200000;
