@@ -851,7 +851,7 @@ DCryptic Wordle #${solutionIndex - 75}
     }
     var newhintword = '';
     for (let i = 0; i < solution.length; i++) {
-      if (currentGuess[i] === solution[i].toUpperCase()) {
+      if (tosolu(currentGuess)[i] === solution[i].toUpperCase()) {
         newhintword += solution[i].toUpperCase();
       } else {
         newhintword += oldhintword[i];
