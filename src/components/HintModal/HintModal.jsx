@@ -63,9 +63,9 @@ const HintModal = ({ isOpen, onClose, sclue, clue, sh1, sh2, sh3, dh1, dh2, dh3,
           />
       ))}
       </div>
-      <button className={dh1===''? styles.showhintbut : styles.shownhintbut} onClick={() => {sh1();}}>{dh1===''? `🔒 Show ${ht1}` : `${dh1}`}</button>
-      {sclue==='D' ? <></> : <><button className={dh2===''? styles.showhintbut : styles.shownhintbut} onClick={() => {sh2();}}>{dh2===''? `🔒 Show ${ht2}` : `${dh2}`}</button>
-      <button className={dh3===''? styles.showhintbut : styles.shownhintbut} onClick={() => {sh3();}}>{dh3===''? `🔒 Show ${ht3}` : `${dh3}`}</button></>}
+      <button className={dh1===''? styles.showhintbut : styles.shownhintbut} onClick={() => {sh1();}}>{dh1===''? `🔒 ${ht1.charAt(0).toUpperCase()}${ht1.slice(1)}` : `${dh1}`}</button>
+      {sclue==='D' ? <></> : <><button className={dh2===''? styles.showhintbut : styles.shownhintbut} onClick={() => {sh2();}}>{dh2===''? `🔒 ${ht2.charAt(0).toUpperCase()}${ht2}` : `${dh2}`}</button>
+      <button className={dh3===''? styles.showhintbut : styles.shownhintbut} onClick={() => {sh3();}}>{dh3===''? `🔒 ${ht3.charAt(0).toUpperCase()}${ht3.slice(1)}` : `${dh3}`}</button></>}
     </Modal>
   );
 };
