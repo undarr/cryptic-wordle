@@ -538,14 +538,21 @@ MCryptic Wordle #${solutionIndex} ${
 - ${mclue}
 ${
   ismGameLost || ismGameWon
-    ? `${ismGameLost ? '💀' : '✨'} ${
-        ismGameLost ? 'X' : mguesses.length
-      }/${MAX_CHALLENGES} guesses with ${mhintused}/${
-        3 +
-        mrevealed.split('').length -
-        msolution.split('').filter(c => c === '-').length
-      } hints!
-${generateEmojiGrid(mguesses, msolution, mrevealed)}`
+    ? mguesses.length === 1
+      ? mhintused === 0
+        ? '🎯 Aced✨!'
+        : `🎯 Semi-Aced with ${mhintused}/${
+            3 +
+            mrevealed.split('').length -
+            msolution.split('').filter(c => c === '-').length
+          } hints!\n${generateEmojiGrid(mguesses, msolution, mrevealed)}`
+      : `${ismGameLost ? '💀' : '✨'} ${
+          ismGameLost ? 'X' : mguesses.length
+        }/${MAX_CHALLENGES} guesses with ${mhintused}/${
+          3 +
+          mrevealed.split('').length -
+          msolution.split('').filter(c => c === '-').length
+        } hints!\n${generateEmojiGrid(mguesses, msolution, mrevealed)}`
     : '❓ Unattempted/Unfinished'
 }
 
@@ -555,12 +562,17 @@ DCryptic Wordle #${solutionIndex - 75} ${
 - ${dclue}
 ${
   isdGameLost || isdGameWon
-    ? `${isdGameLost ? '💀' : '✨'} ${
-        isdGameLost ? 'X' : dguesses.length
-      }/${MAX_CHALLENGES} guesses with ${dhintused}/${
-        1 + drevealed.length
-      } hints!
-${generateEmojiGrid(dguesses, dsolution, drevealed)}`
+    ? dguesses.length === 1
+      ? dhintused === 0
+        ? '🎯 Aced✨!'
+        : `🎯 Semi-Aced with ${dhintused}/${
+            1 + drevealed.length
+          } hints!\n${generateEmojiGrid(dguesses, dsolution, drevealed)}`
+      : `${isdGameLost ? '💀' : '✨'} ${
+          isdGameLost ? 'X' : dguesses.length
+        }/${MAX_CHALLENGES} guesses with ${dhintused}/${
+          1 + drevealed.length
+        } hints!\n${generateEmojiGrid(dguesses, dsolution, drevealed)}`
     : '❓ Unattempted/Unfinished'
 }`;
     navigator.clipboard.writeText(textToShare);
@@ -693,6 +705,16 @@ ${generateEmojiGrid(dguesses, dsolution, drevealed)}`
             (mdisplayhint3 === '' ? 0 : 1) +
             mrevealed.split('').filter(c => c !== '-').length -
             mrevealed.split('').filter(c => c === ' ').length;
+      if (ismGameWon && mguesses.length === 1 && mhintused === 0) {
+        return '🎯 Aced✨!';
+      }
+      if (ismGameWon && mguesses.length === 1) {
+        return `🎯 Semi-Aced with ${hintused}/${
+          3 +
+          mrevealed.split('').length -
+          msolution.split('').filter(c => c === '-').length
+        } hints!`;
+      }
       return `${ismGameLost ? '💀' : ismGameWon ? '✨' : '🤔 At'} ${
         ismGameLost ? 'X' : mguesses.length
       }/${MAX_CHALLENGES} guesses with ${hintused}/${
@@ -708,6 +730,12 @@ ${generateEmojiGrid(dguesses, dsolution, drevealed)}`
           : (ddisplayhint === '' ? 0 : 1) +
             drevealed.length -
             drevealed.split('').filter(c => c === ' ').length;
+      if (isdGameWon && dguesses.length === 1 && dhintused === 0) {
+        return '🎯 Aced✨!';
+      }
+      if (isdGameWon && dguesses.length === 1) {
+        return `🎯 Semi-Aced with ${hintused}/${1 + drevealed.length} hints!`;
+      }
       return `${isdGameLost ? '💀' : isdGameWon ? '✨' : '🤔 At'} ${
         isdGameLost ? 'X' : dguesses.length
       }/${MAX_CHALLENGES} guesses with ${hintused}/${
