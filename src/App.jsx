@@ -705,10 +705,13 @@ ${
             (mdisplayhint3 === '' ? 0 : 1) +
             mrevealed.split('').filter(c => c !== '-').length -
             mrevealed.split('').filter(c => c === ' ').length;
+      const letterhintused =
+        mrevealed.split('').filter(c => c !== '-').length -
+        mrevealed.split('').filter(c => c === ' ').length;
       if (ismGameWon && mguesses.length === 1 && mhintused === 0) {
         return '🎯 Aced✨!';
       }
-      if (ismGameWon && mguesses.length === 1) {
+      if (ismGameWon && mguesses.length === 1 && letterhintused === 0) {
         return `🎯 Semi-Aced with ${hintused}/${
           3 +
           mrevealed.split('').length -
@@ -730,10 +733,12 @@ ${
           : (ddisplayhint === '' ? 0 : 1) +
             drevealed.length -
             drevealed.split('').filter(c => c === ' ').length;
+      const letterhintused =
+        drevealed.length - drevealed.split('').filter(c => c === ' ').length;
       if (isdGameWon && dguesses.length === 1 && dhintused === 0) {
         return '🎯 Aced✨!';
       }
-      if (isdGameWon && dguesses.length === 1) {
+      if (isdGameWon && dguesses.length === 1 && letterhintused === 0) {
         return `🎯 Semi-Aced with ${hintused}/${1 + drevealed.length} hints!`;
       }
       return `${isdGameLost ? '💀' : isdGameWon ? '✨' : '🤔 At'} ${
