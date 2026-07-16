@@ -179,13 +179,14 @@ function App() {
     const epochMs = 1740355200000;
     const now = Date.now();
     const msInDay = 86400000;
-    const index = 4 + Math.floor((now - epochMs) / msInDay);
-    const nextday = (index - 3) * msInDay + epochMs;
+    const eighttotwelve = 1000 * 3600 * 4.25
+    const index = 4 + Math.floor((now - epochMs - eighttotwelve) / msInDay);
+    const nextday = (index - 3) * msInDay + epochMs + eighttotwelve;
     setsolutionIndex(index);
     settomorrow(nextday);
     const tdy = Date.now();
     const startOfToday =
-      Math.floor(tdy / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000);
+      Math.floor((tdy-eighttotwelve) / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000)+eighttotwelve;
     const url =
       'https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks';
     const headers = {
