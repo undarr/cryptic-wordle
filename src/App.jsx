@@ -187,6 +187,7 @@ function App() {
     const tdy = Date.now();
     const startOfToday =
       Math.floor((tdy-eighttotwelve) / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000)+eighttotwelve;
+    console.log(Date.now(startOfToday));
     const url =
       'https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks';
     const headers = {
