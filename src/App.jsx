@@ -571,7 +571,7 @@ ${
     : '❓ Unattempted/Unfinished'
 }
 
-DCryptic Wordle #${solutionIndex - 75} ${
+DCryptic Wordle #${solutionIndex - 75} (#${solutionIndex - 75 - 498}) ${
       ddisplayhint1[0] === '🔓'[0] ? '🔓' : '🔒'
     }
 - ${dclue}
