@@ -326,6 +326,8 @@ function App() {
         setIsdGameWon(true);
         setdhintused(
           (ddisplayhint1 === '' ? 0 : 1) +
+            (ddisplayhint2 === '' ? 0 : 1) +
+            (ddisplayhint3 === '' ? 0 : 1) +
             drevealed.length -
             drevealed.split('').filter(c => c === ' ').length
         );
@@ -352,6 +354,8 @@ function App() {
         setIsdGameLost(true);
         setdhintused(
           (ddisplayhint1 === '' ? 0 : 1) +
+            (ddisplayhint2 === '' ? 0 : 1) +
+            (ddisplayhint3 === '' ? 0 : 1) +
             drevealed.length -
             drevealed.split('').filter(c => c === ' ').length
         );
@@ -583,12 +587,12 @@ ${
       ? dhintused === 0
         ? '🎯 Aced✨!'
         : `🎯 Semi-Aced with ${dhintused}/${
-            1 + drevealed.length
+            3 + drevealed.length
           } hints!\n${generateEmojiGrid(dguesses, dsolution, drevealed)}`
       : `${isdGameLost ? '💀' : '✨'} ${
           isdGameLost ? 'X' : dguesses.length
         }/${MAX_CHALLENGES} guesses with ${dhintused}/${
-          1 + drevealed.length
+          3 + drevealed.length
         } hints!\n${generateEmojiGrid(dguesses, dsolution, drevealed)}`
     : '❓ Unattempted/Unfinished'
 }`;
