@@ -186,13 +186,17 @@ function App() {
     const epochMs = 1740355200000;
     const now = Date.now();
     const msInDay = 86400000;
-    const eighttotwelve = 1000 * 3600 * 4 + 1000 * 60 * 4 /*4 hours and 4 minutes*/
+    const eighttotwelve =
+      1000 * 3600 * 4 + 1000 * 60 * 4; /*4 hours and 4 minutes*/
     const index = 4 + Math.floor((now - epochMs - eighttotwelve) / msInDay);
     const nextday = (index - 3) * msInDay + epochMs + eighttotwelve;
     setsolutionIndex(index);
     settomorrow(nextday);
     const tdy = Date.now();
-    const startOfToday = Math.floor((tdy-eighttotwelve) / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000)+eighttotwelve;
+    const startOfToday =
+      Math.floor((tdy - eighttotwelve) / (24 * 60 * 60 * 1000)) *
+        (24 * 60 * 60 * 1000) +
+      eighttotwelve;
     const url =
       'https://api.browse.ai/v2/robots/ef597c3b-e228-4444-952d-6de2a65681c7/tasks';
     const headers = {
@@ -989,9 +993,9 @@ DCryptic Wordle #${solutionIndex - 75}
         dh1={displayhint1}
         dh2={displayhint2}
         dh3={displayhint3}
-        ht1={mhintt1}
-        ht2={mhintt2}
-        ht3={mhintt3}
+        ht1={sclue === 'M' ? mhintt1 : 'hint 1'}
+        ht2={sclue === 'M' ? mhintt2 : 'hint 2'}
+        ht3={sclue === 'M' ? mhintt3 : 'hint 3'}
         hintword={sclue === 'M' ? mhintword : dhintword}
         sol={sclue === 'M' ? msolution : dsolution}
         getGuessStatuses={getGuessStatuses}
