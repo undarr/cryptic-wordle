@@ -35,6 +35,7 @@ const InfoModal = ({ isOpen, onClose }) => {
       </div>
       <h3>The letter U is not in the word in any spot.</h3>
       </div>
+      <h3>an Undarfly Project since February 2025, by Ulfred Chan</h3>
     </Modal>
   );
 };

@@ -71,20 +71,25 @@ function App() {
   const [mclueby, setmclueby] = useState('Loading...');
 
   const [dclue, setdclue] = useState('Loading...');
-  const [dhint, setdhint] = useState('Loading...');
-  const [ddisplayhint, setddisplayhint] = useLocalStorage('ddh', '');
+  const [dhint1, setdhint1] = useState('DHINT1');
+  const [dhint2, setdhint2] = useState('DHINT2');
+  const [dhint3, setdhint3] = useState('DHINT3');
+  const [ddisplayhint1, setddisplayhint1] = useLocalStorage('ddh1', '');
+  const [ddisplayhint2, setddisplayhint2] = useLocalStorage('ddh2', '');
+  const [ddisplayhint3, setddisplayhint3] = useLocalStorage('ddh3', '');
   const [dhintword, setdhintword] = useLocalStorage('dhw', WORDS[0]);
   const [drevealed, setdrevealed] = useLocalStorage('dr', WORDS[0]);
-  const [dvideo, setdvideo] = useState('Loading...');
+  const [dvideo, setdvideo] = useState('https://dailycryptic.co/play/daily');
   const [dsolution, setdsolution] = useState(WORDS[0]);
   const [danswerlength, setdanswerlength] = useState(0);
+  const [dclueby, setdclueby] = useState('Loading...');
 
   function swapclue(x = '') {
     if (x === 'D') {
       setsclue('D');
-      setdisplayhint1(ddisplayhint);
-      setdisplayhint2('');
-      setdisplayhint3('');
+      setdisplayhint1(ddisplayhint1);
+      setdisplayhint2(ddisplayhint2);
+      setdisplayhint3(ddisplayhint3);
     } else if (x === 'M') {
       setsclue('M');
       setdisplayhint1(mdisplayhint1);
@@ -92,9 +97,9 @@ function App() {
       setdisplayhint3(mdisplayhint3);
     } else if (sclue === 'M') {
       setsclue('D');
-      setdisplayhint1(ddisplayhint);
-      setdisplayhint2('');
-      setdisplayhint3('');
+      setdisplayhint1(ddisplayhint1);
+      setdisplayhint2(ddisplayhint2);
+      setdisplayhint3(ddisplayhint3);
     } else if (sclue === 'D') {
       setsclue('M');
       setdisplayhint1(mdisplayhint1);
@@ -128,7 +133,9 @@ function App() {
       const newdsol = ddata.split(' ()dc() ')[0];
       setdclue(ddata.split(' ()dc() ')[1]);
       setdsolution(newdsol);
-      setdhint(ddata.split(' ()dc() ')[3]);
+      setdhint1(ddata.split(' ()dc() ')[3]);
+      setdhint2(ddata.split(' ()dc() ')[4]);
+      setdhint3(ddata.split(' ()dc() ')[5]);
       setdvideo(ddata.split(' ()dc() ')[2]);
       setdanswerlength(ddata.split(' ()dc() ')[0].length);
       function stringToHash(string) {
@@ -155,7 +162,7 @@ function App() {
         setmdisplayhint1('');
         setmdisplayhint2('');
         setmdisplayhint3('');
-        setddisplayhint('');
+        setddisplayhint1('');
         setmhintword(
           tosolu(startguess(newsol)) +
             ' '.repeat(newsol.length - tosolu(startguess(newsol)).length)
@@ -314,11 +321,13 @@ function App() {
       } else {
         setIsdGameWon(true);
         setdhintused(
-          (ddisplayhint === '' ? 0 : 1) +
+          (ddisplayhint1 === '' ? 0 : 1) +
             drevealed.length -
             drevealed.split('').filter(c => c === ' ').length
         );
         showhint1('✨ ');
+        showhint2('✨ ');
+        showhint3('✨ ');
       }
       setTimeout(() => showAlert('Well done', 'success'), ALERT_DELAY);
       setTimeout(() => setIsStatsModalOpen(true), ALERT_DELAY + 1000);
@@ -338,11 +347,13 @@ function App() {
       } else {
         setIsdGameLost(true);
         setdhintused(
-          (ddisplayhint === '' ? 0 : 1) +
+          (ddisplayhint1 === '' ? 0 : 1) +
             drevealed.length -
             drevealed.split('').filter(c => c === ' ').length
         );
         showhint1('💀 ');
+        showhint2('💀 ');
+        showhint3('💀 ');
       }
       setTimeout(
         () => showAlert(`The word is ${solution}`, 'error', true),
@@ -557,7 +568,7 @@ ${
 }
 
 DCryptic Wordle #${solutionIndex - 75} ${
-      ddisplayhint[0] === '🔓'[0] ? '🔓' : '🔒'
+      ddisplayhint1[0] === '🔓'[0] ? '🔓' : '🔒'
     }
 - ${dclue}
 ${
@@ -640,9 +651,9 @@ ${
       }
     }
     if (sclue === 'D') {
-      if (ddisplayhint === '') {
-        setddisplayhint(x + 'Definition : "' + dhint + '"');
-        setdisplayhint1(x + 'Definition : "' + dhint + '"');
+      if (ddisplayhint1 === '') {
+        setddisplayhint1(x + 'Hint1 : ' + dhint1);
+        setdisplayhint1(x + 'Hint1 : ' + dhint1);
       }
     }
   };
@@ -667,7 +678,10 @@ ${
       }
     }
     if (sclue === 'D') {
-      setdisplayhint2('');
+      if (ddisplayhint2 === '') {
+        setddisplayhint2(x + 'Hint2 : ' + dhint2);
+        setdisplayhint2(x + 'Hint2 : ' + dhint2);
+      }
     }
   };
 
@@ -691,7 +705,10 @@ ${
       }
     }
     if (sclue === 'D') {
-      setdisplayhint3('');
+      if (ddisplayhint3 === '') {
+        setddisplayhint3(x + 'Hint3 : ' + dhint3);
+        setdisplayhint3(x + 'Hint3 : ' + dhint3);
+      }
     }
   };
 
@@ -730,7 +747,9 @@ ${
       const hintused =
         isdGameLost || isdGameWon
           ? dhintused
-          : (ddisplayhint === '' ? 0 : 1) +
+          : (ddisplayhint1 === '' ? 0 : 1) +
+            (ddisplayhint2 === '' ? 0 : 1) +
+            (ddisplayhint3 === '' ? 0 : 1) +
             drevealed.length -
             drevealed.split('').filter(c => c === ' ').length;
       const letterhintused =
@@ -739,12 +758,12 @@ ${
         return '🎯 Aced✨!';
       }
       if (isdGameWon && dguesses.length === 1 && letterhintused === 0) {
-        return `🎯 Semi-Aced with ${hintused}/${1 + drevealed.length} hints!`;
+        return `🎯 Semi-Aced with ${hintused}/${3 + drevealed.length} hints!`;
       }
       return `${isdGameLost ? '💀' : isdGameWon ? '✨' : '🤔 At'} ${
         isdGameLost ? 'X' : dguesses.length
       }/${MAX_CHALLENGES} guesses with ${hintused}/${
-        1 + drevealed.length
+        3 + drevealed.length
       } hints!`;
     }
   };
@@ -943,9 +962,9 @@ DCryptic Wordle #${solutionIndex - 75}
         getGuessStatuses={getGuessStatuses}
         MAX_WORD_LENGTH={danswerlength}
         clue={dclue}
-        displayhint1={ddisplayhint}
-        displayhint2=""
-        displayhint3=""
+        displayhint1={ddisplayhint1}
+        displayhint2={ddisplayhint2}
+        displayhint3={ddisplayhint3}
         sol={dsolution}
         isGameWon={isdGameWon}
         hide={sclue !== 'D'}
