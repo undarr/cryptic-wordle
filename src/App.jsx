@@ -993,9 +993,9 @@ DCryptic Wordle #${solutionIndex - 75}
         dh1={displayhint1}
         dh2={displayhint2}
         dh3={displayhint3}
-        ht1={sclue === 'M' ? mhintt1 : 'hint 1'}
-        ht2={sclue === 'M' ? mhintt2 : 'hint 2'}
-        ht3={sclue === 'M' ? mhintt3 : 'hint 3'}
+        ht1={sclue === 'M' ? mhintt1 : 'show hint 1'}
+        ht2={sclue === 'M' ? mhintt2 : 'show hint 2'}
+        ht3={sclue === 'M' ? mhintt3 : 'show hint 3'}
         hintword={sclue === 'M' ? mhintword : dhintword}
         sol={sclue === 'M' ? msolution : dsolution}
         getGuessStatuses={getGuessStatuses}
