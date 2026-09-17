@@ -573,6 +573,8 @@ ${
 
 DCryptic Wordle #${solutionIndex - 75} (#${solutionIndex - 75 - 498}) ${
       ddisplayhint1[0] === '🔓'[0] ? '🔓' : '🔒'
+    }${ddisplayhint2[0] === '🔓'[0] ? '🔓' : '🔒'}${
+      ddisplayhint3[0] === '🔓'[0] ? '🔓' : '🔒'
     }
 - ${dclue}
 ${
