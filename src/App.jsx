@@ -163,6 +163,8 @@ function App() {
         setmdisplayhint2('');
         setmdisplayhint3('');
         setddisplayhint1('');
+        setddisplayhint2('');
+        setddisplayhint3('');
         setmhintword(
           tosolu(startguess(newsol)) +
             ' '.repeat(newsol.length - tosolu(startguess(newsol)).length)
