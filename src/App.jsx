@@ -74,9 +74,11 @@ function App() {
   const [dhint1, setdhint1] = useState('DHINT1');
   const [dhint2, setdhint2] = useState('DHINT2');
   const [dhint3, setdhint3] = useState('DHINT3');
+  const [dhint4, setdhint4] = useState('DHINT4');
   const [ddisplayhint1, setddisplayhint1] = useLocalStorage('ddh1', '');
   const [ddisplayhint2, setddisplayhint2] = useLocalStorage('ddh2', '');
   const [ddisplayhint3, setddisplayhint3] = useLocalStorage('ddh3', '');
+  const [ddisplayhint4, setddisplayhint4] = useLocalStorage('ddh3', '');
   const [dhintword, setdhintword] = useLocalStorage('dhw', WORDS[0]);
   const [drevealed, setdrevealed] = useLocalStorage('dr', WORDS[0]);
   const [dvideo, setdvideo] = useState('https://dailycryptic.co/play/daily');
@@ -136,6 +138,7 @@ function App() {
       setdhint1(ddata.split(' ()dc() ')[3]);
       setdhint2(ddata.split(' ()dc() ')[4]);
       setdhint3(ddata.split(' ()dc() ')[5]);
+      setdhint4(ddata.split(' ()dc() ')[6]);
       setdvideo(ddata.split(' ()dc() ')[2]);
       setdanswerlength(ddata.split(' ()dc() ')[0].length);
       function stringToHash(string) {
@@ -188,8 +191,7 @@ function App() {
     const epochMs = 1740355200000;
     const now = Date.now();
     const msInDay = 86400000;
-    const eighttotwelve =
-      1000 * 3600 * 4 + 1000 * 60 * 4; /*4 hours and 4 minutes*/
+    const eighttotwelve = 60 * 4; //1000 * 3600 * 4 + 1000 * 60 * 4; /*4 hours and 4 minutes*/
     const index = 4 + Math.floor((now - epochMs - eighttotwelve) / msInDay);
     const nextday = (index - 3) * msInDay + epochMs + eighttotwelve;
     setsolutionIndex(index);
